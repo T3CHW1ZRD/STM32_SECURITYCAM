@@ -1,0 +1,13 @@
+-- CreateTable
+CREATE TABLE "Device" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+);
+
+-- CreateTable
+CREATE TABLE "Image" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "timestamp" DATETIME NOT NULL,
+    "imageURL" TEXT NOT NULL,
+    "deviceId" INTEGER NOT NULL,
+    CONSTRAINT "Image_deviceId_fkey" FOREIGN KEY ("deviceId") REFERENCES "Device" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
