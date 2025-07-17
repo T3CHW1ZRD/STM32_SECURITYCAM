@@ -1,6 +1,7 @@
 #include "network.hpp"
 #include "mbed.h"
 #include "TCPSocket.h"
+#include "config.h"
 
 static EventFlags socket_event;
 static TCPSocket socket;
@@ -32,13 +33,12 @@ bool connect_to_wifi(const std::string &ssid, const std::string &password) {
 }
 
 void start_tcp_server() {
-    const char* SERVER_IP = "192.168.0.30";  // Replace with actual PC IP
-    const int SERVER_PORT = 12345;
 
     WiFiInterface *wifi = WiFiInterface::get_default_instance();
     socket.open(wifi);
 
     SocketAddress server_addr;
+    // SERVER_IP and SERVER_PORT set in config.h
     server_addr.set_ip_address(SERVER_IP);
     server_addr.set_port(SERVER_PORT);
 
