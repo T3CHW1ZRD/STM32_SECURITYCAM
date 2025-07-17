@@ -2,4 +2,4 @@
 
 ### Running notes:
 
--Set Computer IP address and port in Config.h
+-Set Computer IP address and port in /STM32/onfig.h
