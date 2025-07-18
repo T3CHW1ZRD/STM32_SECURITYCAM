@@ -18,13 +18,33 @@ void init_filesystem() {
 }
 
 WifiCredentials prompt_user_input() {
-    char ssid[64], password[64];
+    char ssid[64] = {};
+    char password[64] = {};
+    // --- SSID Input ---
     printf("Enter SSID: ");
-    scanf("%63s", ssid);
+    int i = 0;
+    while (i < sizeof(ssid) - 1) {
+        char c = getchar();
+        if (c == '\r' || c == '\n') break;
+        ssid[i++] = c;
+        printf("%c", c);  // Echo typed character
+    }
+    ssid[i] = '\0';
+    printf("\n");
+    // --- Password Input ---
     printf("Enter Password: ");
-    scanf("%63s", password);
+    i = 0;
+    while (i < sizeof(password) - 1) {
+        char c = getchar();
+        if (c == '\r' || c == '\n') break;
+        password[i++] = c;
+        printf("*");  // Mask character
+    }
+    password[i] = '\0';
+    printf("\n");
     return WifiCredentials{ssid, password};
 }
+
 
 void save_credentials(const WifiCredentials &cred) {
     FILE *file = fopen(settings_path, "w");
