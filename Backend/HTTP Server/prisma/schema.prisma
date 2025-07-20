@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -16,7 +15,10 @@ datasource db {
 
 model Device{
   id              Int        @id @default(autoincrement())
-  images          Image[]           
+  images          Image[]   
+  temperature     Float
+  humidity        Float
+
 }
 
 model Image{

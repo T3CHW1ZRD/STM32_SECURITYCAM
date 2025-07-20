@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 'use strict';
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 const port =(()=>{
     const args = process.argv;
@@ -21,9 +23,16 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-const server = app.listen(port, ()=>{
+app.post("/sample", (req, res) => {
+  console.log("Received data:", req.body);
+  res.status(200).send({ message: "Data received successfully!" });
+});
+
+
+const server = app.listen(port, "0.0.0.0", ()=>{
     console.log(`Server running on port ${port}`);
 });
+
 
 server.on('error', (err) =>{
     console.error(`cannot start server: ${err.message}`);
