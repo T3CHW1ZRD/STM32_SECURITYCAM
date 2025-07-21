@@ -1,77 +1,92 @@
 #include "network.hpp"
+#include "config.h"
+#include "aes_util.hpp"
 #include "mbed.h"
 #include "TCPSocket.h"
-#include "config.h"
 
-static EventFlags socket_event;
 static TCPSocket socket;
+static EventFlags evt;
 
-// sigio callback to wake thread
-static void on_socket_activity() {
-    socket_event.set(0x01);
-}
+// Sigio callback
+static void on_socket_activity() { evt.set(0x01); }
 
-bool connect_to_wifi(const std::string &ssid, const std::string &password) {
+bool connect_to_wifi(const std::string &ssid, const std::string &pwd) {
     WiFiInterface *wifi = WiFiInterface::get_default_instance();
-    if (!wifi) {
-        printf("No WiFiInterface found.\n");
+    if (!wifi) return false;
+    if (wifi->connect(ssid.c_str(), pwd.c_str(), NSAPI_SECURITY_WPA_WPA2) != 0)
         return false;
-    }
-
-    printf("Connecting to %s...\n", ssid.c_str());
-    int ret = wifi->connect(ssid.c_str(), password.c_str(), NSAPI_SECURITY_WPA_WPA2);
-    if (ret != 0) {
-        printf("Wi-Fi connect failed: %d\n", ret);
-        return false;
-    }
-
-    SocketAddress ip;
-    wifi->get_ip_address(&ip);
-    printf("Connected! IP address: %s\n", ip.get_ip_address());
-
+    printf("Wi-Fi up. IP: %s\n", wifi->get_ip_address());
     return true;
 }
 
-void start_tcp_server() {
+bool perform_handshake() {
+    uint8_t challenge[16], iv[16];
+    fill_random(challenge, sizeof(challenge));
+    fill_random(iv,        sizeof(iv));
 
+    // send plain challenge ⨁ IV
+    if (socket.send(challenge, 16) < 0) return false;
+    if (socket.send(iv,        16) < 0) return false;
+
+    // await encrypted echo (16 bytes)
+    uint8_t resp[16];
+    if (socket.recv(resp, sizeof(resp)) != 16) return false;
+
+    // decrypt and compare
+    uint8_t plain[16], key[24];
+    if (!load_aes_key(key, sizeof(key))) return false;
+    aes_cbc_decrypt(key, sizeof(key), iv, resp, plain, sizeof(plain));
+
+    return (memcmp(plain, challenge, sizeof(challenge)) == 0);
+}
+
+void start_secure_client() {
     WiFiInterface *wifi = WiFiInterface::get_default_instance();
     socket.open(wifi);
 
-    SocketAddress server_addr;
-    // SERVER_IP and SERVER_PORT set in config.h
-    server_addr.set_ip_address(SERVER_IP);
-    server_addr.set_port(SERVER_PORT);
+    SocketAddress addr;
+    addr.set_ip_address(SERVER_IP);
+    addr.set_port(SERVER_PORT);
+    socket.connect(addr);
 
-    printf("Connecting to server at %s:%d...\n", SERVER_IP, SERVER_PORT);
-    int ret = socket.connect(server_addr);
-    if (ret != 0) {
-        printf("Failed to connect: %d\n", ret);
+    if (!perform_handshake()) {
+        printf("Handshake failed\n");
         return;
     }
+    printf("Handshake OK\n");
 
-    printf("Connected to server!\n");
-
-    // Send handshake or hello
-    const char* hello = "Hello from STM32\n";
-    socket.send(hello, strlen(hello));
-
-    // Set non-blocking + sigio
     socket.set_blocking(false);
     socket.sigio(callback(on_socket_activity));
 
-    // Enter deep sleep receive loop
-    char buffer[256];
     while (true) {
-        // Sleep until data arrives
-        socket_event.wait_any(0x01);
+        evt.wait_any(0x01);
 
-        while (true) {
-            int size = socket.recv(buffer, sizeof(buffer) - 1);
-            if (size <= 0) break;
+        // read IV
+        uint8_t iv[16];
+        if (socket.recv(iv, sizeof(iv)) <= 0) continue;
 
-            buffer[size] = '\0';
-            printf("Received: %s\n", buffer);
-        }
+        // read header (8 bytes)
+        uint8_t hdr[8];
+        if (socket.recv(hdr, sizeof(hdr)) != 8) continue;
+
+        uint32_t data_len  = *(uint32_t*)(hdr + 3);
+        uint8_t  pad       = hdr[7];
+        uint32_t total     = sizeof(CommandPacket) + data_len + pad;
+
+        // read ciphertext
+        uint8_t *cipher = (uint8_t*)malloc(total);
+        socket.recv(cipher, total);
+
+        // decrypt
+        uint8_t *plain = (uint8_t*)malloc(total);
+        uint8_t key[24];
+        load_aes_key(key, sizeof(key));
+        aes_cbc_decrypt(key, sizeof(key), iv, cipher, plain, total);
+
+        // dispatch
+        process_incoming_command((CommandPacket*)plain);
+
+        free(cipher);
+        free(plain);
     }
-
 }
