@@ -3,17 +3,18 @@ const crypto = require('crypto'); // using crypto to encrypt and decrypt
 const fs = require('fs');
 const algorithm = 'aes-128-ctr';
 const key = "something";
+
 const server = net.createServer((socket) => {
     console.log('Connection established')
     socket.on('data',  buffer =>{
         console.log('Received bytes', buffer.length);
+        
         const iv = buffer.subarray(0, 16); // first 16 bytes are the initialisation vector
         const remaining = buffer.subarray(16);//the encrypted struct
 
         //https://nodejs.org/api/crypto.html#class-decipheriv
         const decipher = crypto.createDecipheriv(algorithm, key, iv);
-        let decrypted = decipher.update(remaining);
-        decrypted += decipher.final();
+        const decrypted = Buffer.concat([decipher.update(remaining), decipher.final()]);
         console.log(decrypted);
         
 
@@ -29,8 +30,13 @@ const server = net.createServer((socket) => {
 
         const filename = `img_${Date.now()}.jpg`;
 
+        //confirm if the command_id is a challenge packet, then decrypt and send back
+        if(command_id == 0x01){
+            socket.write(payload);
+        }
 
-        fs.writeFile('Image', filename, payload, (err)=>{
+        if(command_id == 0x02){
+        fs.writeFile(filename, payload, (err)=>{
             if(err){
                 console.error('Image saving failed', err);
             }
@@ -39,6 +45,7 @@ const server = net.createServer((socket) => {
             }
         })
         socket.write('Receiving successful');
+    }
     });
     socket.on('end', () =>{
         console.log('Disconnected');
