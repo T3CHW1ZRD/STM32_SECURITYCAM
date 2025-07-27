@@ -7,7 +7,8 @@
 #define TRIGGER_RANGE 600
 
 I2C i2c(PB_11, PB_10); // IC2 from datasheet 
-VL53L0X vl_sensor(&i2c);
+BusOut range_shutdown(PC_6);
+VL53L0X range_sensor(&i2c);
 
 Ticker ToFTicker; // Used to trigger the ToF sensor every 50 ms
 EventQueue queue(32 * EVENTS_EVENT_SIZE);
@@ -19,7 +20,7 @@ void entry_detected() {
 }
 
 void check_entry() {
-    int distance = vl_sensor.getRangeMillimeters();
+    int distance = range_sensor.getRangeMillimeters();
     if (distance < TRIGGER_RANGE && triggered == false) {
         queue.call(entry_detected);
         triggered = true;
@@ -36,13 +37,14 @@ void check_sensor() {
 }
 
 int main() {
+    uint8_t shutdown_pin = 1;
+    range_shutdown = shutdown_pin;
     // i2c.frequency(9600);
     // Initializing time of flight sensor
     // printf("Starting sensor\n");
 
-    if (!vl_sensor.init()) {
+    if (!range_sensor.init()) {
         printf("Sensor init failed!\n");
-        return 1;
     }
 
     printf("\n--- TCP Server with Saved Wi-Fi ---\n");
@@ -63,8 +65,8 @@ int main() {
 
     start_tcp_server();
 
-    vl_sensor.setModeContinuous();
-    vl_sensor.startContinuous();
+    range_sensor.setModeContinuous();
+    range_sensor.startContinuous();
     
     // Setting up Ticker to trigger time of flight sensor check
     ToFTicker.attach(check_sensor, 100ms);
