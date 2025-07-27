@@ -1,8 +1,50 @@
 #include "mbed.h"
+#include "VL53L0X.h"
 #include "wifi_credentials.hpp"
 #include "network.hpp"
 
+
+#define TRIGGER_RANGE 600
+
+I2C i2c(PB_11, PB_10); // IC2 from datasheet 
+VL53L0X vl_sensor(&i2c);
+
+Ticker ToFTicker; // Used to trigger the ToF sensor every 50 ms
+EventQueue queue(32 * EVENTS_EVENT_SIZE);
+
+bool triggered = false; // Last state of the ToF sensor
+
+void entry_detected() {
+    queue.call(printf, "Motion detected!");
+}
+
+void check_entry() {
+    int distance = vl_sensor.getRangeMillimeters();
+    if (distance < TRIGGER_RANGE && triggered == false) {
+        queue.call(entry_detected);
+        triggered = true;
+    } else if (distance >= TRIGGER_RANGE) {
+        triggered = false;
+    } else {
+        triggered = true;
+    }
+
+}
+
+void check_sensor() {
+    queue.call(check_entry);
+}
+
 int main() {
+    // i2c.frequency(9600);
+    // Initializing time of flight sensor
+    // printf("Starting sensor\n");
+
+    if (!vl_sensor.init()) {
+        printf("Sensor init failed!\n");
+        return 1;
+    }
+
     printf("\n--- TCP Server with Saved Wi-Fi ---\n");
 
     init_filesystem();
@@ -20,4 +62,13 @@ int main() {
     }
 
     start_tcp_server();
+
+    vl_sensor.setModeContinuous();
+    vl_sensor.startContinuous();
+    
+    // Setting up Ticker to trigger time of flight sensor check
+    ToFTicker.attach(check_sensor, 100ms);
+    while (true) {
+        queue.dispatch_forever();
+    }
 }
