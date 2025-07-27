@@ -1,58 +1,98 @@
 const net = require('net');
-const crypto = require('crypto'); // using crypto to encrypt and decrypt
+const crypto = require('crypto');
 const fs = require('fs');
+const axios = require('axios');
+const Packet = require('./Packet');
+
+
 const algorithm = 'aes-128-ctr';
-const key = "something";
+const key = 'something';
+
+function decryptPacket(iv, encrypted) {
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+    return decrypted;
+}
+
+function sendChallengeResponse(socket, payload) {
+    socket.write(payload);
+}
+
+async function deviceRegistration(socket, clientIp){
+    try{
+        await axios.post('http://localhost:3000/device', {
+            headers:{
+                'Content-Type': 'application/json',
+                'X-Client': 'clientIp',
+            }
+        });
+        console.log('Device registered with Backend');
+    }
+    catch(err){
+        console.log('Failed to forward image', err.message);
+    }
+}
+
+async function forwardImage(socket, packet, clientIp) {
+    const filename = `img_${Date.now()}.jpg`;
+
+    fs.writeFile(filename, packet.payload, (err) => {
+        if (err) {
+            console.error('Image saving failed', err);
+            socket.write('Image saving failed');
+            return;
+        } else {
+            console.log('Image saved:', filename);
+        }
+    });
+
+    try {
+        await axios.post('http://localhost:3000/', packet.payload, {
+            headers: {
+                'Content-Type': 'application/octet-stream',
+                'X-Timestamp': packet.timestamp,
+                //'X-Command-Arg': packet.command_arg,
+                'X-Client': clientIp,
+            }
+        });
+        console.log('Image forwarded to HTTP');
+        socket.write('Image forwarded to HTTP');
+    } catch (err) {
+        console.error('Failed to forward image', err.message);
+        socket.write('Failed to forward image');
+    }
+}
 
 const server = net.createServer((socket) => {
-    console.log('Connection established')
-    socket.on('data',  buffer =>{
-        console.log('Received bytes', buffer.length);
+    console.log('Connection established');
+
+    socket.on('data', async (buffer) => {
+        console.log('Received bytes:', buffer.length);
+
+        const iv = buffer.subarray(0, 16);
+        const encrypted = buffer.subarray(16);
+
+        const decrypted = decryptPacket(iv, encrypted);
+        const packet = new Packet(decrypted);
         
-        const iv = buffer.subarray(0, 16); // first 16 bytes are the initialisation vector
-        const remaining = buffer.subarray(16);//the encrypted struct
-
-        //https://nodejs.org/api/crypto.html#class-decipheriv
-        const decipher = crypto.createDecipheriv(algorithm, key, iv);
-        const decrypted = Buffer.concat([decipher.update(remaining), decipher.final()]);
-        console.log(decrypted);
-        
-
-        // To be removed later and added to HTTP Server
-        //parsing the decrypted data
-        const command_id = decrypted.readUInt8(0);
-
-        const command_arg = decrypted.readUInt16(1);
-        const data_len = decrypted.readUInt32(3);
-        const padding_len = decrypted.readUInt8(7);
-        const timestamp = decrypted.readUInt32(8);
-        const payload = decrypted.subarray(12, 12 + data_len); 
-
-        const filename = `img_${Date.now()}.jpg`;
-
-        //confirm if the command_id is a challenge packet, then decrypt and send back
-        if(command_id == 0x01){
-            socket.write(payload);
+        const deviceIp = socket.remoteAddress();
+    
+        if (packet.command_id === 0x01) {
+            sendChallengeResponse(socket, packet.payload);
+            await deviceRegistration(socket, deviceIp);
+        } else if (packet.command_id === 0x02) {
+            await forwardImage(socket, packet, deviceIp);
+        } else {
+            socket.write('Invalid command');
         }
-
-        if(command_id == 0x02){
-        fs.writeFile(filename, payload, (err)=>{
-            if(err){
-                console.error('Image saving failed', err);
-            }
-            else{
-                console.log('Received Image decrypted and Saved');
-            }
-        })
-        socket.write('Receiving successful');
-    }
     });
-    socket.on('end', () =>{
+
+    socket.on('end', () => {
         console.log('Disconnected');
     });
 });
 
 const PORT = 5001;
-server.listen(PORT,() =>{
+server.listen(PORT, () => {
     console.log(`TCP Server running on port ${PORT}`);
 });
