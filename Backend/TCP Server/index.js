@@ -17,7 +17,7 @@ function decryptPacket(iv, encrypted) {
 function sendChallengeResponse(socket, payload) {
     socket.write(payload);
 }
-
+// Function to register the new device in the database using IP address as unique identifier. 
 async function deviceRegistration(socket, clientIp){
     try{
         await axios.post('http://localhost:3000/device', {
@@ -32,7 +32,7 @@ async function deviceRegistration(socket, clientIp){
         console.log('Failed to forward image', err.message);
     }
 }
-
+// Function to send HTTP request to server 
 async function forwardImage(socket, packet, clientIp) {
     const filename = `img_${Date.now()}.jpg`;
 

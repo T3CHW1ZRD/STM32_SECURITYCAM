@@ -15,10 +15,11 @@ datasource db {
 
 model Device{
   id              Int        @id @default(autoincrement())
+  ip              String     @unique
   images          Image[]   
-  temperature     Float
+  temperature     Float    
   humidity        Float
-
+  entries         Entry[]
 }
 
 model Image{
@@ -29,4 +30,10 @@ model Image{
   device          Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 }
 
+model Entry{
+  id              Int @id @default(autoincrement())
+  timestamp       DateTime
+  deviceId        Int
+  device          Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+}
 
