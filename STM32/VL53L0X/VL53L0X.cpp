@@ -60,19 +60,34 @@ bool VL53L0X::setDeviceAddress(uint8_t address)
  */
 bool VL53L0X::init()
 {
-  VL53L0X_Error Status = VL53L0X_ERROR_NONE;
+    VL53L0X_Error Status = VL53L0X_ERROR_NONE;
 
-  VL53L0X_GetVersion(&m_vl_version);
+    VL53L0X_GetVersion(&m_vl_version);
+    printf("VL53L0X API Version: %d.%d.%d (revision %d)\n",
+           m_vl_version.major, m_vl_version.minor, m_vl_version.build, m_vl_version.revision);
 
-  if (Status == VL53L0X_ERROR_NONE)
-  {
-    Status = VL53L0X_DataInit(&m_vl_dev); // Data initialization
-  }
-  if (Status == VL53L0X_ERROR_NONE)
-  {
+    // Data Init
+    Status = VL53L0X_DataInit(&m_vl_dev);
+    if (Status != VL53L0X_ERROR_NONE) {
+        printf("VL53L0X_DataInit failed! Status = %d\n", Status);
+        return false;
+    }
+
+    // Get device info
     Status = VL53L0X_GetDeviceInfo(&m_vl_dev, &m_vl_deviceinfo);
-  }
-  return 0;
+    if (Status != VL53L0X_ERROR_NONE) {
+        printf("VL53L0X_GetDeviceInfo failed! Status = %d\n", Status);
+        return false;
+    }
+
+    printf("Device Info:\n");
+    printf("  Name: %s\n", m_vl_deviceinfo.Name);
+    printf("  Type: %s\n", m_vl_deviceinfo.Type);
+    printf("  ProductId: %s\n", m_vl_deviceinfo.ProductId);
+    printf("  ProductRevisionMajor: %d\n", m_vl_deviceinfo.ProductRevisionMajor);
+    printf("  ProductRevisionMinor: %d\n", m_vl_deviceinfo.ProductRevisionMinor);
+
+    return true;
 }
 
 /**
