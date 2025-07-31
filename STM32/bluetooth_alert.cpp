@@ -1,4 +1,6 @@
 #include "bluetooth_alert.hpp"
+#include "proj_config.h"
+
 
 using namespace std::chrono_literals;
 
@@ -117,7 +119,6 @@ void BluetoothAlert::set_adv_payload_idle() {
         ble::adv_data_flags_t::BREDR_NOT_SUPPORTED
     );
 
-    // ✅ Correct API for Mbed OS 6.x: advertise our service UUID(s)
     if (auto e = _adv_builder.setLocalServiceList(mbed::make_Span(&_svc_uuid, 1), /*complete*/ true)) {
         printf("setLocalServiceList err=%d\r\n", e);
     }
@@ -130,7 +131,7 @@ void BluetoothAlert::set_adv_payload_idle() {
     // SCAN response: name
     ble::AdvertisingDataBuilder scan_rsp(_scan_resp_buf);
     scan_rsp.clear();
-    scan_rsp.setName("SECCAM");
+    scan_rsp.setName(BLE_NAME);
     _ble.gap().setAdvertisingScanResponse(
         ble::LEGACY_ADVERTISING_HANDLE,
         scan_rsp.getAdvertisingData()
@@ -138,14 +139,14 @@ void BluetoothAlert::set_adv_payload_idle() {
 }
 
 void BluetoothAlert::set_alert_state_adv(bool alert) {
-    // Optional: keep a manufacturer byte mirroring alert state (00/01)
+    // Keep a manufacturer byte mirroring alert state (00/01)
     _adv_builder.clear();
     _adv_builder.setFlags(
         ble::adv_data_flags_t::LE_GENERAL_DISCOVERABLE |
         ble::adv_data_flags_t::BREDR_NOT_SUPPORTED
     );
 
-    // Keep service UUID in payload even when toggling manufacturer data
+    // Service UUID in payload even when toggling manufacturer data
     (void)_adv_builder.setLocalServiceList(mbed::make_Span(&_svc_uuid, 1), true);
 
     const uint8_t mfg[] = { 0xFF, 0xFF, static_cast<uint8_t>(alert ? 1 : 0) };
@@ -156,7 +157,7 @@ void BluetoothAlert::set_alert_state_adv(bool alert) {
         _adv_builder.getAdvertisingData()
     );
 
-    // Scan response: keep the name
+    // Scan response
     ble::AdvertisingDataBuilder scan_rsp(_scan_resp_buf);
     scan_rsp.clear();
     scan_rsp.setName("SECCAM");

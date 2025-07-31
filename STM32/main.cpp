@@ -71,7 +71,7 @@ int main() {
 
     if (!connect_to_wifi(cred.ssid, cred.password)) {
         printf("Wi-Fi connection failed.\n");
-        return -1;
+        return -1; 
     }
 
     start_tcp_server(); 
