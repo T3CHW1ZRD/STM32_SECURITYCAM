@@ -1,19 +1,27 @@
+// File: aes_util.cpp
 #include "aes_util.hpp"
+#include "aes_key.hpp"
+#include "config.hpp"
 #include "mbedtls/aes.h"
-#include "config.h"
 #include "mbed.h"
 #include <cstdio>
+#include <cstring>
 
-// Load raw key bytes from filesystem
 bool load_aes_key(uint8_t *key_out, size_t key_len) {
+    // 1) Try filesystem
     FILE *f = fopen(AES_KEY_PATH, "rb");
-    if (!f) return false;
-    size_t r = fread(key_out, 1, key_len, f);
-    fclose(f);
-    return r == key_len;
+    if (f) {
+        size_t r = fread(key_out, 1, key_len, f);
+        fclose(f);
+        if (r == key_len) {
+            return true;
+        }
+    }
+    // 2) Fallback to embedded key
+    memcpy(key_out, EMBEDDED_AES_KEY, key_len);
+    return true;
 }
 
-// Simple PRNG for IV (mbed::rand)
 void fill_random(uint8_t *buf, size_t len) {
     for (size_t i = 0; i < len; ++i) {
         buf[i] = (uint8_t)(rand() & 0xFF);
