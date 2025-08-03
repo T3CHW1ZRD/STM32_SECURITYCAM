@@ -1,92 +1,94 @@
 #include "mbed.h"
-#include "VL53L0X.h"
-#include "wifi_credentials.hpp"
-#include "network.hpp"
-#include "bluetooth_alert.hpp"  
+#include <cstdint>
+#include "ArduCAM.h"
+#include "memorysaver.h"
 
-#define TRIGGER_RANGE 600
+// ===== Pins for DISCO-L475VG-IOT01A =====
+// SPI: MOSI=PA_7, MISO=PA_6, SCK=PA_5
+// I2C: SDA=PB_9, SCL=PB_8
+// CS for ArduCAM: PA_2
+static BufferedSerial pc(USBTX, USBRX, 115200);
+static SPI spi(PA_7 /*MOSI*/, PA_6 /*MISO*/, PA_5 /*SCK*/);
+static I2C i2c(PB_9 /*SDA*/, PB_8 /*SCL*/);
 
+// ArduCAM instance (uses Mbed-style constructor with SPI* and CS pin)
+ArduCAM myCAM(OV2640, PA_2, &spi);  // ctor & methods: see ArduCAM.h/.cpp
 
-I2C i2c(PB_11, PB_10); // IC2 from datasheet 
-BusOut range_shutdown(PC_6);
-VL53L0X range_sensor(&i2c);
+// Not defined in your header; ArduCAM TRIG "capture done" bit is 0x08
+#ifndef CAP_DONE_MASK
+#define CAP_DONE_MASK 0x08
+#endif
 
-Ticker ToFTicker; // Used to trigger the ToF sensor every 50 ms
-EventQueue queue(32 * EVENTS_EVENT_SIZE);
-BluetoothAlert bt_alert(queue);
-
-bool triggered = false; // Last state of the ToF sensor
-int min_noise = 20;
-
-void entry_detected() {
-    queue.call(printf, "Motion detected! \r\n");
-    queue.call(callback(&bt_alert, &BluetoothAlert::trigger_alert));
-
-}
-
-void check_entry() {
-    if (bt_alert.isBusy()){
-        //queue.call(printf, "BLE IS BUSY"); // DEBUG
-        return;
-    }
-
-    int distance = range_sensor.getRangeMillimeters();
-    //queue.call(printf, "Distance: %d \r\n", distance); // DEBUG
-    if (distance > min_noise && distance < TRIGGER_RANGE && triggered == false) {
-        queue.call(entry_detected);
-        triggered = true;
-    } else if (distance >= TRIGGER_RANGE) {
-        triggered = false;
-    } else {
-        triggered = true;
-    }
-
-}
-
-void check_sensor() {
-    queue.call(check_entry);
+// Helper: write a C-string to USB serial
+static void write_str(const char* s) {
+    pc.write(s, strlen(s));
 }
 
 int main() {
-    uint8_t shutdown_pin = 1;
-    range_shutdown = shutdown_pin;
-    // i2c.frequency(9600);
-    // Initializing time of flight sensor
-    // printf("Starting sensor\n");
+    // Bring up peripherals
+    spi.format(8, 0);
+    spi.frequency(8'000'000);        // 8 MHz SPI
+    i2c.frequency(400'000);          // 400 kHz I2C
 
-    if (!range_sensor.init()) {
-        printf("Sensor init failed!\n");
-    }
+    // Give host a moment to open the VCOM
+    ThisThread::sleep_for(500ms);
 
-    printf("\n--- TCP Server with Saved Wi-Fi ---\n");
+    write_str("ArduCAM Mini 2MP Plus test\r\n");
 
-    init_filesystem();
+    // ===== Camera init & JPEG setup (Mbed-style API) =====
+    // --- Supported JPEG Resolutions (use with OV2640_set_JPEG_size):
+    // OV2640_160x120     // QQVGA — lowest quality (tiny, unusable)
+    // OV2640_176x144     // QCIF
+    // OV2640_320x240     // QVGA — decent for thumbnails
+    // OV2640_352x288     // CIF
+    // OV2640_640x480     // VGA — recommended for most use cases
+    // OV2640_800x600     // SVGA — high quality, bigger file
+    // OV2640_1024x768    // XGA
+    // OV2640_1280x1024   // SXGA — near max for 2MP
+    // OV2640_1600x1200   // UXGA — max resolution (watch for FIFO overflow)
 
-    WifiCredentials cred;
-    if (!load_credentials(cred)) {
-        printf("No saved Wi-Fi credentials.\n");
-        cred = prompt_user_input();
-        save_credentials(cred);
-    }
+    // --- JPEG quality (set_jpeg_quality):
+    // Lower hex value = less compression = better image = bigger file
+    // 0x36  → low quality / high compression
+    // 0x2A  → medium (default-ish)
+    // 0x24  → good
+    // 0x20  → high
+    // 0x1C  → very high (may result in larger file than FIFO allows)
+    myCAM.set_format(JPEG, i2c);
+    myCAM.OV2640_set_JPEG_size(i2c, OV2640_1024x768); // or any from the enum
+    myCAM.set_jpeg_quality(i2c, 0x2A);               // tweak to taste
 
-    if (!connect_to_wifi(cred.ssid, cred.password)) {
-        printf("Wi-Fi connection failed.\n");
-        return -1; 
-    }
+    // Clear FIFO and start first capture
+    myCAM.flush_fifo();
+    myCAM.start_capture();
 
-    start_tcp_server(); 
-
-    range_sensor.setModeContinuous();
-    range_sensor.startContinuous();
-    
-    // Setup bluetooth
-    bt_alert.init();
-    // Setting up Ticker to trigger time of flight sensor check
-    ToFTicker.attach(check_sensor, 100ms);
-    
-    
-
+    // Main loop: wait for frame, dump FIFO over serial, trigger next frame
     while (true) {
-        queue.dispatch_forever();
+        if (myCAM.get_bit(ARDUCHIP_TRIG, CAP_DONE_MASK)) {
+            write_str("Capture done, dumping JPEG...\r\n");
+
+            uint32_t len = myCAM.read_fifo_length();
+            if (len == 0 || len > MAX_FIFO_SIZE) {
+                write_str("  \xE2\x80\xBC  FIFO error\r\n"); // "‼"
+            } else {
+                // Stream out in chunks using burst reads
+                const size_t CHUNK = 512;
+                uint8_t buf[CHUNK];
+
+                while (len > 0) {
+                    size_t n = (len > CHUNK) ? CHUNK : (size_t)len;
+                    myCAM.burst_read_fifo(buf, n);   // reads n bytes from FIFO
+                    pc.write(buf, n);                // write raw JPEG bytes
+                    len -= n;
+                }
+                write_str("\r\n\xE2\x9C\x94\xEF\xB8\x8F  JPEG sent\r\n"); // "✔️"
+            }
+
+            // Prepare next frame
+            myCAM.flush_fifo();
+            myCAM.start_capture();
+        }
+
+        ThisThread::sleep_for(3000ms);
     }
 }

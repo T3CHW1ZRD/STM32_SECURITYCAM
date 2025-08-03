@@ -1,7 +1,7 @@
 #include "network.hpp"
 #include "mbed.h"
 #include "TCPSocket.h"
-#include "config.h"
+#include "proj_config.h"
 
 static EventFlags socket_event;
 static TCPSocket socket;
