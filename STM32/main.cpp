@@ -55,8 +55,8 @@ int main() {
     // 0x20  → high
     // 0x1C  → very high (may result in larger file than FIFO allows)
     myCAM.set_format(JPEG, i2c);
-    myCAM.OV2640_set_JPEG_size(i2c, OV2640_1024x768); // or any from the enum
-    myCAM.set_jpeg_quality(i2c, 0x2A);               // tweak to taste
+    myCAM.OV2640_set_JPEG_size(i2c, OV2640_1024x768); // Options above for size
+    myCAM.set_jpeg_quality(i2c, 0x2A);               // Options above for JPEG quality
 
     // Clear FIFO and start first capture
     myCAM.flush_fifo();
