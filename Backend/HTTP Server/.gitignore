@@ -3,3 +3,8 @@ node_modules
 .env
 
 /generated/prisma
+node_modules
+# Keep environment variables out of version control
+.DS_Store
+package-lock.json
+prisma/dev*
