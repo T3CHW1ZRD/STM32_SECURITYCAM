@@ -3,10 +3,11 @@ const crypto = require('crypto');
 const fs = require('fs');
 const axios = require('axios');
 const Packet = require('./Packet');
+require('dotenv').config();
+const key = Buffer.from(process.env.KEY, 'hex');
 
 
-const algorithm = 'aes-128-ctr';
-const key = 'something';
+const algorithm = 'aes-128-cdc';
 
 function decryptPacket(iv, encrypted) {
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
@@ -47,7 +48,7 @@ async function forwardImage(socket, packet, clientIp) {
     });
 
     try {
-        await axios.post('http://localhost:3000/', packet.payload, {
+        await axios.post('http://localhost:3000/image', packet.payload, {
             headers: {
                 'Content-Type': 'application/octet-stream',
                 'X-Timestamp': packet.timestamp,
