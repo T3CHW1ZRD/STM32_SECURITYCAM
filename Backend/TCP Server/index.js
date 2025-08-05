@@ -7,9 +7,10 @@ require('dotenv').config();
 const key = Buffer.from(process.env.KEY, 'hex');
 
 
-const algorithm = 'aes-128-cdc';
+const algorithm = 'aes-192-cbc';
 
 function decryptPacket(iv, encrypted) {
+    console.log(key.length);
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
     const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
     return decrypted;
@@ -21,16 +22,17 @@ function sendChallengeResponse(socket, payload) {
 // Function to register the new device in the database using IP address as unique identifier. 
 async function deviceRegistration(socket, clientIp){
     try{
-        await axios.post('http://localhost:3000/device', {
+        await axios.post('http://localhost:3000/device', null, {
             headers:{
-                'Content-Type': 'application/json',
-                'X-Client': 'clientIp',
+                'X-Client': `${clientIp}`,
             }
         });
         console.log('Device registered with Backend');
+        //socket.write(Buffer.from([1]));
     }
     catch(err){
-        console.log('Failed to forward image', err.message);
+        // socket.write('0');
+        console.log('Failed to Register Device', err.message);
     }
 }
 // Function to send HTTP request to server 
@@ -76,11 +78,12 @@ const server = net.createServer((socket) => {
         const decrypted = decryptPacket(iv, encrypted);
         const packet = new Packet(decrypted);
         
-        const deviceIp = socket.remoteAddress();
+        const deviceIp = socket.remoteAddress;
     
         if (packet.command_id === 0x01) {
             sendChallengeResponse(socket, packet.payload);
             await deviceRegistration(socket, deviceIp);
+
         } else if (packet.command_id === 0x02) {
             await forwardImage(socket, packet, deviceIp);
         } else {
