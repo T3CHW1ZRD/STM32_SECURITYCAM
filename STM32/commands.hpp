@@ -1,16 +1,15 @@
-// File: commands.hpp
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
 #include <cstdint>
 
-// Packed command packet header (no gaps)
+// Packed header (12 bytes) + flexible payload
 struct __attribute__((packed)) CommandPacket {
     uint8_t  command_id;     // Identifies the command
     uint16_t command_arg;    // Optional argument
-    uint32_t data_len;       // Length of payload
-    uint8_t  padding_len;    // Padding to multiple of 16
-    uint32_t timestamp;      // Timestamp (set to 0 when sending)
+    uint32_t data_len;       // Length of data[] in bytes
+    uint8_t  padding_len;    // Padding added to make total payload block-aligned
+    uint32_t timestamp;      // Timestamp (set to 0 for now)
     uint8_t  data[];         // Flexible array member
 };
 
@@ -19,14 +18,14 @@ static constexpr uint8_t CMD_GET_PHOTO      = 0x01;  // Server → Device
 static constexpr uint8_t CMD_SEND_PHOTO     = 0x02;  // Device → Server
 static constexpr uint8_t CMD_ALARM_TRIPPED  = 0x03;  // Device → Server
 
-// Application hook for inbound server command
-void on_get_photo(void);
+// Application callback for incoming “Get Photo”
+void on_get_photo();
 
-// Device‑side senders (defined in commands.cpp)
+// Device-side senders
 int send_send_photo(const uint8_t *data, uint32_t len);
-int send_alarm_tripped(void);
+int send_alarm_tripped();
 
-// Dispatcher for inbound encrypted packets
+// Dispatch incoming decrypted packets
 void process_incoming_command(const CommandPacket *pkt);
 
-#endif // COMMANDS_HPP
+#endif 

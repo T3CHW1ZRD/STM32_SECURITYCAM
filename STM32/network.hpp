@@ -1,17 +1,20 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
-#include "wifi_credentials.hpp"
+#include <cstdint>
+#include "nsapi_types.h"    // for nsapi_error_t
 #include "commands.hpp"
-#include <string>
 
-// Bring up Wi‑Fi
-bool connect_to_wifi(const std::string &ssid, const std::string &pwd);
+// Connect to Wi-Fi; returns NSAPI_ERROR_OK on success or an NSAPI_ERROR_* on failure
+nsapi_error_t connect_to_wifi(const char *ssid, const char *pwd);
 
-// Do plain-text challenge/response handshake
+// Blocking challenge/response handshake
 bool perform_handshake();
 
-// Enter encrypted receive loop (never returns)
+// Encrypted receive loop (never returns)
 void start_secure_client();
 
-#endif // NETWORK_HPP
+// Low-level send used by commands.cpp
+int send_packet(const void *buf, uint32_t len);
+
+#endif
