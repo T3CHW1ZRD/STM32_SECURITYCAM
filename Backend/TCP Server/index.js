@@ -50,7 +50,7 @@ async function forwardImage(socket, packet, clientIp) {
     });
 
     try {
-        await axios.post('http://localhost:3000/image', packet.payload, {
+        await axios.post('http://localhost:3000/device/image', packet.payload, {
             headers: {
                 'Content-Type': 'application/octet-stream',
                 'X-Timestamp': packet.timestamp,
@@ -59,10 +59,10 @@ async function forwardImage(socket, packet, clientIp) {
             }
         });
         console.log('Image forwarded to HTTP');
-        socket.write('Image forwarded to HTTP');
+        //socket.write('Image forwarded to HTTP');
     } catch (err) {
         console.error('Failed to forward image', err.message);
-        socket.write('Failed to forward image');
+        //socket.write('Failed to forward image');
     }
 }
 
@@ -80,14 +80,15 @@ const server = net.createServer((socket) => {
         
         const deviceIp = socket.remoteAddress;
     
-        if (packet.command_id === 0x01) {
+        if (packet.command_id === 0x00) {
             sendChallengeResponse(socket, packet.payload);
             await deviceRegistration(socket, deviceIp);
 
         } else if (packet.command_id === 0x02) {
             await forwardImage(socket, packet, deviceIp);
         } else {
-            socket.write('Invalid command');
+            //socket.write('Invalid command');
+            console.log('Invalid command received from device')
         }
     });
 
