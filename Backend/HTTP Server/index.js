@@ -36,6 +36,7 @@ app.post("/device", async(req, res) => {
     //confirm whether the device already exists
     //create a new device model
     const deviceIp = req.headers['x-client'];
+    
     const device = await(prisma.device.findUnique({where: {ip: deviceIp}}));
     if(!device){
         const newDevice = await prisma.device.create({
@@ -52,15 +53,35 @@ app.post("/device", async(req, res) => {
 
 //this endpoint redirects the request to correct deviceId 
 
-app.post("/image", async(req, res) =>{
-    const deviceIp = req.headers['x-client'];
-    console.log(deviceIp);
-    const device = await(prisma.device.findUnique({where: {ip: deviceIp}}));
-    if(device){
-        const deviceId = device.id;
-        res.redirect(`/device/${deviceId}/image`);
+app.post("/device/image", express.raw({ type: 'application/octet-stream', limit: '10mb' }), async(req, res) =>{
+    try{
+        const deviceIp = req.headers['x-client'];
+        const device = await(prisma.device.findUnique({where: {ip: deviceIp}}));
+        if(device){
+            const deviceId = device.id;
+            const timestamp = parseInt(req.headers['x-timestamp']);
+            const image = req.body;
+
+            const filename = `image_${Date.now()}.jpg`;
+            const filepath = path.join(__dirname, 'uploads', filename);
+
+            fs.writeFileSync(filepath, image);
+            const newImage = await prisma.image.create({
+                data:{
+                    timestamp: new Date(timestamp),
+                    imageURL: `/uploads/${filename}`,
+                    device: {connect:{id: deviceId}}
+
+                }
+            });
+            res.status(200).json('Registration complete')
+        }
+        else
+            console.log("Device not Registered with server");
     }
-    console.log("Device not Registered with server");
+    catch(err){
+        console.log(err.message);
+    }
 });
 
 app.post("/device/:deviceId/image", async (req,res)=>{
