@@ -1,43 +1,86 @@
+// File: network.cpp
+
 #include "network.hpp"
-#include "config.h"
+#include "config.hpp"         // SERVER_IP, SERVER_PORT, AES_KEY_PATH
 #include "aes_util.hpp"
 #include "mbed.h"
 #include "TCPSocket.h"
+#include "rtos/ThisThread.h"
+#include "rtos/Thread.h"
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+using namespace std::chrono_literals;
 
-static TCPSocket socket;
+static TCPSocket  socket;
 static EventFlags evt;
+static rtos::Mutex io_mutex;     // <— protect all socket I/O
 
-// Sigio callback
-static void on_socket_activity() { evt.set(0x01); }
-
-bool connect_to_wifi(const std::string &ssid, const std::string &pwd) {
-    WiFiInterface *wifi = WiFiInterface::get_default_instance();
-    if (!wifi) return false;
-    if (wifi->connect(ssid.c_str(), pwd.c_str(), NSAPI_SECURITY_WPA_WPA2) != 0)
-        return false;
-    printf("Wi-Fi up. IP: %s\n", wifi->get_ip_address());
-    return true;
+// sigio callback
+static void on_socket_activity() {
+    evt.set(0x01);
 }
 
+// low-level send used by commands.cpp
+int send_packet(const void *buf, uint32_t len) {
+    // we assume caller has already locked io_mutex if needed
+    return socket.send(buf, len);
+}
+
+// Bring up Wi-Fi, return NSAPI_ERROR_OK or error code
+nsapi_error_t connect_to_wifi(const char *ssid, const char *pwd) {
+    WiFiInterface *wifi = WiFiInterface::get_default_instance();
+    if (!wifi) {
+        printf("No WiFiInterface found\n");
+        return NSAPI_ERROR_NO_CONNECTION;
+    }
+
+    ThisThread::sleep_for(500ms);
+    nsapi_error_t ret = wifi->connect(ssid, pwd, NSAPI_SECURITY_WPA_WPA2);
+    if (ret != NSAPI_ERROR_OK) {
+        printf("Wi-Fi connect failed (%d)\n", ret);
+        return ret;
+    }
+    SocketAddress ip;
+    wifi->get_ip_address(&ip);
+    printf("IP: %s\n", ip.get_ip_address());
+    return NSAPI_ERROR_OK;
+}
+
+// Blocking handshake as client (all I/O under lock)
 bool perform_handshake() {
-    uint8_t challenge[16], iv[16];
+    uint8_t challenge[16], iv[16], resp[16], plain[16], key[24];
+
     fill_random(challenge, sizeof(challenge));
     fill_random(iv,        sizeof(iv));
 
-    // send plain challenge ⨁ IV
-    if (socket.send(challenge, 16) < 0) return false;
-    if (socket.send(iv,        16) < 0) return false;
+    io_mutex.lock();
+    bool ok = true;
+    if (socket.send(challenge, 16) != 16) { ok = false; }
+    if (ok && socket.send(iv, 16) != 16)   { ok = false; }
+    if (ok) {
+        int n = socket.recv(resp, 16);
+        ok = (n == 16);
+    }
+    io_mutex.unlock();
 
-    // await encrypted echo (16 bytes)
-    uint8_t resp[16];
-    if (socket.recv(resp, sizeof(resp)) != 16) return false;
+    if (!ok) {
+        printf("Handshake: I/O error\n");
+        return false;
+    }
 
-    // decrypt and compare
-    uint8_t plain[16], key[24];
-    if (!load_aes_key(key, sizeof(key))) return false;
-    aes_cbc_decrypt(key, sizeof(key), iv, resp, plain, sizeof(plain));
-
-    return (memcmp(plain, challenge, sizeof(challenge)) == 0);
+    if (!load_aes_key(key, sizeof(key))) {
+        printf("Handshake: failed to load key\n");
+        return false;
+    }
+    aes_cbc_decrypt(key, sizeof(key), iv, resp, plain, 16);
+    if (memcmp(plain, challenge, 16) != 0) {
+        printf("Handshake: challenge mismatch\n");
+        return false;
+    }
+    return true;
 }
 
 void start_secure_client() {
@@ -47,46 +90,112 @@ void start_secure_client() {
     SocketAddress addr;
     addr.set_ip_address(SERVER_IP);
     addr.set_port(SERVER_PORT);
-    socket.connect(addr);
 
-    if (!perform_handshake()) {
-        printf("Handshake failed\n");
-        return;
+    for (int attempt = 1; attempt <= 2; ++attempt) {
+        printf("Connecting to %s:%d (attempt %d)...\n",
+               SERVER_IP, SERVER_PORT, attempt);
+        nsapi_error_t ret = socket.connect(addr);
+        if (ret == NSAPI_ERROR_OK) {
+            printf("Connected on attempt %d.\n", attempt);
+            break;
+        }
+        printf("Connect attempt %d failed: %d\n", attempt, ret);
+        if (attempt == 2) {
+            printf("Failed to connect after 2 attempts.\n");
+            return;
+        }
+        ThisThread::sleep_for(2s);
     }
-    printf("Handshake OK\n");
+
+    socket.set_blocking(true);
+    for (int attempt = 1; attempt <= 2; ++attempt) {
+        printf("Handshake attempt %d...\n", attempt);
+        if (perform_handshake()) {
+            printf("Handshake OK on attempt %d.\n", attempt);
+            break;
+        }
+        printf("Handshake attempt %d failed.\n", attempt);
+        if (attempt == 2) {
+            printf("Handshake failed after 2 attempts.\n");
+            return;
+        }
+        ThisThread::sleep_for(1s);
+    }
 
     socket.set_blocking(false);
     socket.sigio(callback(on_socket_activity));
 
+    // Alarm thread: calls send_alarm_tripped() under lock
+    static rtos::Thread alarm_thread;
+    alarm_thread.start([](){
+        srand((unsigned)time(NULL));
+        while (true) {
+            int wait_s = 5 + (rand() % 11);
+            ThisThread::sleep_for(std::chrono::seconds(wait_s));
+            printf(">>> Triggering alarm after %d seconds\n", wait_s);
+
+            // send_alarm_tripped() now already logs debug inside send_command()
+            int result = send_alarm_tripped();
+            printf("send_alarm_tripped() result = %d\n", result);
+        }
+    });
+
+    // Encrypted receive loop (all recv under lock)
     while (true) {
         evt.wait_any(0x01);
 
-        // read IV
-        uint8_t iv[16];
-        if (socket.recv(iv, sizeof(iv)) <= 0) continue;
+        // 1) Read IV + C0 under lock
+        uint8_t iv[16], c0[16];
+        io_mutex.lock();
+        bool ok = true;
+        if (socket.recv(iv, 16) != 16)      ok = false;
+        if (ok && socket.recv(c0, 16) != 16) ok = false;
+        io_mutex.unlock();
+        if (!ok) continue;
 
-        // read header (8 bytes)
-        uint8_t hdr[8];
-        if (socket.recv(hdr, sizeof(hdr)) != 8) continue;
+        // 2) Decrypt header
+        uint8_t p0[16], key[24];
+        if (!load_aes_key(key, sizeof(key))) continue;
+        aes_cbc_decrypt(key, sizeof(key), iv, c0, p0, 16);
 
-        uint32_t data_len  = *(uint32_t*)(hdr + 3);
-        uint8_t  pad       = hdr[7];
-        uint32_t total     = sizeof(CommandPacket) + data_len + pad;
+        // 3) Parse header
+        uint8_t  cmd_id    = p0[0];
+        uint16_t cmd_arg   = p0[1] | (p0[2] << 8);
+        uint32_t data_len  = p0[3] | (p0[4] << 8) | (p0[5] << 16) | (p0[6] << 24);
+        uint8_t  pad_len   = p0[7];
+        uint32_t timestamp = p0[8] | (p0[9] << 8) | (p0[10] << 16) | (p0[11] << 24);
 
-        // read ciphertext
-        uint8_t *cipher = (uint8_t*)malloc(total);
-        socket.recv(cipher, total);
+        uint32_t plain_size  = sizeof(CommandPacket) + data_len + pad_len;
+        uint32_t cipher_size = ((plain_size + 15) / 16) * 16;
+        uint32_t rem_cipher  = cipher_size - 16;
 
-        // decrypt
-        uint8_t *plain = (uint8_t*)malloc(total);
-        uint8_t key[24];
-        load_aes_key(key, sizeof(key));
-        aes_cbc_decrypt(key, sizeof(key), iv, cipher, plain, total);
+        // 4) Read remaining ciphertext under lock
+        auto *c_rest = (uint8_t*)malloc(rem_cipher);
+        if (!c_rest) continue;
+        io_mutex.lock();
+        int got = (rem_cipher ? socket.recv(c_rest, rem_cipher) : 0);
+        io_mutex.unlock();
+        if (got != (int)rem_cipher) { free(c_rest); continue; }
 
-        // dispatch
-        process_incoming_command((CommandPacket*)plain);
+        // 5) Decrypt full packet
+        auto *full_cipher = (uint8_t*)malloc(cipher_size);
+        memcpy(full_cipher, c0, 16);
+        memcpy(full_cipher + 16, c_rest, rem_cipher);
+        free(c_rest);
 
-        free(cipher);
+        auto *plain = (uint8_t*)malloc(cipher_size);
+        aes_cbc_decrypt(key, sizeof(key), iv, full_cipher, plain, cipher_size);
+        free(full_cipher);
+
+        // 6) Dispatch
+        CommandPacket *pkt = reinterpret_cast<CommandPacket*>(plain);
+        pkt->command_id   = cmd_id;
+        pkt->command_arg  = cmd_arg;
+        pkt->data_len     = data_len;
+        pkt->padding_len  = pad_len;
+        pkt->timestamp    = timestamp;
+        process_incoming_command(pkt);
+
         free(plain);
     }
 }
