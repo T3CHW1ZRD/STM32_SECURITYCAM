@@ -25,7 +25,7 @@ const fs = require('fs');
 const path = require('path');
 
 app.use(express.json());
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.post("/sample", (req, res) => {
 
   console.log("Received data:", req.body);
@@ -84,31 +84,29 @@ app.post("/device/image", express.raw({ type: 'application/octet-stream', limit:
     }
 });
 
-app.post("/device/:deviceId/image", async (req,res)=>{
+app.get("/device", async(req, res)=>{
     try{
-        const deviceId = parseInt(req.params.deviceId);
-        const timestamp = parseInt(req.headers['x-timestamp']);
-
-        const image = req.body;
-        
-        const filename = `image_${Date.now()}.jpg`;
-        const filepath = path.join(__dirname, 'uploads', filename);
-
-        fs.writeFileSync(filepath, image);
-        const newImage = await prisma.image.create({
-            data:{
-                timestamp: new Date(timestamp),
-                imageURL: `/uploads/${filename}`,
-                deviceId: {connect:{id: deviceId}}
-
-            }
-        });
-        res.status(200).json('Registration complete');
+        const devices = await prisma.device.findMany();
+        return res.status(200).json(devices);
     }
     catch(err){
         console.log(err.message);
+        res.status(500).json({error: "Failed to get devices"});
+    }
+})
+
+app.get("/device/:deviceId/Images", async(req, res) =>{
+    try{
+        const deviceId = parseInt(req.params.deviceId);
+        const images = await prisma.image.findMany({where: {deviceId}});
+        res.status(200).json(images);
+    }
+    catch(err){
+        console.log(err.message);
+        res.status(500).json({error:"Failed to get images"});
     }
 });
+
 
 const server = app.listen(port, "0.0.0.0", ()=>{
     console.log(`Server running on port ${port}`);

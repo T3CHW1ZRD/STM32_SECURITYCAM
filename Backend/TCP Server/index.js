@@ -10,15 +10,20 @@ const key = Buffer.from(process.env.KEY, 'hex');
 const algorithm = 'aes-192-cbc';
 
 function decryptPacket(iv, encrypted) {
-    console.log(key.length);
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
     const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
     return decrypted;
 }
-
+function encryptChallengePacket(iv, decrypted){
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    const encrypted = Buffer.concat([cipher.update(decrypted), cipher.final()]);
+    return encrypted;
+}
 function sendChallengeResponse(socket, payload) {
+    
     socket.write(payload);
 }
+
 // Function to register the new device in the database using IP address as unique identifier. 
 async function deviceRegistration(socket, clientIp){
     try{
@@ -73,17 +78,21 @@ const server = net.createServer((socket) => {
         console.log('Received bytes:', buffer.length);
 
         const iv = buffer.subarray(0, 16);
-        const encrypted = buffer.subarray(16);
-
-        const decrypted = decryptPacket(iv, encrypted);
+        const data = buffer.subarray(16);
+        const decrypted = decryptPacket(iv, data);
         const packet = new Packet(decrypted);
-        
         const deviceIp = socket.remoteAddress;
-    
+        
         if (packet.command_id === 0x00) {
-            sendChallengeResponse(socket, packet.payload);
-            await deviceRegistration(socket, deviceIp);
+            //if the discovery board requires encrypting the payload
+            // const encrypted = encryptChallengePacket(iv, data);
+            // sendChallengeResponse(socket, encrypted);
 
+            //if the discovery board requires decrypting the data
+            sendChallengeResponse(socket, packet.payload);
+            
+            await deviceRegistration(socket, deviceIp);
+            
         } else if (packet.command_id === 0x02) {
             await forwardImage(socket, packet, deviceIp);
         } else {
