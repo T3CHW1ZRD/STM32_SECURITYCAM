@@ -13,6 +13,9 @@
 #include <ctime>
 #include <chrono>
 #include "cam_thread.hpp"
+#include "tof_monitor.hpp"
+#include "bluetooth_alert.hpp"
+#include "events/EventQueue.h"
 
 using namespace std::chrono_literals;
 
@@ -149,23 +152,23 @@ void start_secure_client() {
     socket.set_blocking(false);
     socket.sigio(callback(on_socket_activity));
 
-    // Alarm thread: calls send_alarm_tripped() under lock
-    static rtos::Thread alarm_thread;
-    alarm_thread.start([](){
-        srand((unsigned)time(NULL));
-        while (true) {
-            int wait_s = 5 + (rand() % 11);
-            ThisThread::sleep_for(std::chrono::seconds(wait_s));
-            printf(">>> Triggering alarm after %d seconds\n", wait_s);
-
-            // send_alarm_tripped() now already logs debug inside send_command()
-            int result = send_alarm_tripped();
-            printf("send_alarm_tripped() result = %d\n", result);
-        }
-    });
+    // BT EVENTS
+    static events::EventQueue ble_q(32 * EVENTS_EVENT_SIZE);
+    static rtos::Thread       ble_thread(osPriorityNormal);
+    static BluetoothAlert     bt(ble_q);
+    
+    bt.init();
+    ble_thread.start(callback(&ble_q, &events::EventQueue::dispatch_forever));
 
     // Camera thread - cam_thread.cpp
     start_cam_thread(io_mutex);
+
+
+    // Alarm thread: calls send_alarm_tripped() under lock
+    // ToF monitor (10 Hz sampler, non-blocking).
+    start_tof_monitor(/*trigger_range_mm=*/600, /*min_noise=*/20, &ble_q, &bt);
+
+    
 
     // Encrypted‐receive loop starts here …
     socket.set_blocking(false);
