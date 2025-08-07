@@ -1,0 +1,768 @@
+2025-08-07 00:25:11,090 [INFO] listening on 0.0.0.0:12345
+2025-08-07 00:25:12,063 [INFO] client ('192.168.2.111', 8721) connected
+2025-08-07 00:25:12,064 [INFO] connection closed
+2025-08-07 00:25:13,084 [INFO] client ('192.168.2.111', 8722) connected
+2025-08-07 00:25:13,086 [INFO] connection closed
+2025-08-07 00:25:14,137 [INFO] client ('192.168.2.111', 8723) connected
+2025-08-07 00:25:14,138 [INFO] connection closed
+2025-08-07 00:25:15,184 [INFO] CTRL-C on listener — shutting down.
+2025-08-07 00:25:24,815 [INFO] listening on 0.0.0.0:12345
+2025-08-07 00:33:17,633 [INFO] listening on 0.0.0.0:12345
+2025-08-07 00:44:27,996 [INFO] CTRL-C on listener — shutting down.
+2025-08-07 00:44:57,629 [INFO] listening on 0.0.0.0:12345
+2025-08-07 00:44:58,970 [INFO] client ('192.168.2.111', 28493) connected
+2025-08-07 00:44:58,971 [INFO] connection closed
+2025-08-07 00:45:09,979 [INFO] client ('192.168.2.111', 28494) connected
+2025-08-07 00:45:09,982 [INFO] connection closed
+2025-08-07 00:45:16,952 [INFO] client ('192.168.2.111', 28495) connected
+2025-08-07 00:45:16,954 [INFO] connection closed
+2025-08-07 00:45:28,023 [INFO] client ('192.168.2.111', 28496) connected
+2025-08-07 00:45:28,024 [INFO] connection closed
+2025-08-07 00:45:48,947 [INFO] client ('192.168.2.111', 28497) connected
+2025-08-07 00:45:48,948 [INFO] connection closed
+2025-08-07 00:45:55,460 [INFO] client ('192.168.2.111', 28498) connected
+2025-08-07 00:45:55,463 [INFO] connection closed
+2025-08-07 00:46:23,191 [INFO] client ('192.168.2.111', 4899) connected
+2025-08-07 00:46:23,192 [INFO] connection closed
+2025-08-07 00:46:34,182 [INFO] client ('192.168.2.111', 4900) connected
+2025-08-07 00:46:34,183 [INFO] connection closed
+2025-08-07 00:46:45,185 [INFO] client ('192.168.2.111', 4901) connected
+2025-08-07 00:46:45,205 [INFO] connection closed
+2025-08-07 00:46:55,137 [INFO] client ('192.168.2.111', 4902) connected
+2025-08-07 00:46:55,139 [INFO] connection closed
+2025-08-07 00:47:02,157 [INFO] client ('192.168.2.111', 4903) connected
+2025-08-07 00:47:02,159 [INFO] connection closed
+2025-08-07 00:47:12,155 [INFO] client ('192.168.2.111', 4904) connected
+2025-08-07 00:47:12,155 [INFO] connection closed
+2025-08-07 00:47:19,137 [INFO] client ('192.168.2.111', 4905) connected
+2025-08-07 00:47:19,140 [INFO] connection closed
+2025-08-07 00:47:30,153 [INFO] client ('192.168.2.111', 4906) connected
+2025-08-07 00:47:30,156 [INFO] connection closed
+2025-08-07 00:47:37,202 [INFO] client ('192.168.2.111', 4907) connected
+2025-08-07 00:47:38,564 [INFO] connection closed
+2025-08-07 00:47:46,567 [INFO] client ('192.168.2.111', 4908) connected
+2025-08-07 00:47:46,567 [INFO] connection closed
+2025-08-07 00:47:53,535 [INFO] client ('192.168.2.111', 4909) connected
+2025-08-07 00:47:53,537 [INFO] connection closed
+2025-08-07 00:48:04,528 [INFO] client ('192.168.2.111', 4910) connected
+2025-08-07 00:48:04,529 [INFO] connection closed
+2025-08-07 00:48:11,032 [INFO] client ('192.168.2.111', 4911) connected
+2025-08-07 00:48:11,034 [INFO] connection closed
+2025-08-07 00:48:32,203 [INFO] client ('192.168.2.111', 4912) connected
+2025-08-07 00:48:32,204 [INFO] connection closed
+2025-08-07 00:48:43,044 [INFO] client ('192.168.2.111', 4913) connected
+2025-08-07 00:48:43,045 [INFO] connection closed
+2025-08-07 00:49:02,038 [INFO] client ('192.168.2.111', 4914) connected
+2025-08-07 00:49:02,040 [INFO] connection closed
+2025-08-07 00:49:09,034 [INFO] client ('192.168.2.111', 4915) connected
+2025-08-07 00:49:09,036 [INFO] connection closed
+2025-08-07 00:49:16,024 [INFO] client ('192.168.2.111', 4916) connected
+2025-08-07 00:49:16,025 [INFO] connection closed
+2025-08-07 00:49:26,996 [INFO] client ('192.168.2.111', 4917) connected
+2025-08-07 00:49:26,999 [INFO] connection closed
+2025-08-07 00:49:34,006 [INFO] client ('192.168.2.111', 4918) connected
+2025-08-07 00:49:34,008 [INFO] connection closed
+2025-08-07 00:49:45,009 [INFO] client ('192.168.2.111', 4919) connected
+2025-08-07 00:49:45,009 [INFO] connection closed
+2025-08-07 00:49:57,420 [INFO] listening on 0.0.0.0:12345
+2025-08-07 00:49:59,009 [INFO] client ('192.168.2.111', 4920) connected
+2025-08-07 00:49:59,018 [INFO] hdr len=11184 seq=0
+2025-08-07 00:49:59,400 [INFO] saved frames\frame_00000_20250807_004959.jpg (11184 bytes)
+2025-08-07 00:49:59,435 [INFO] hdr len=11184 seq=1
+2025-08-07 00:49:59,848 [INFO] saved frames\frame_00001_20250807_004959.jpg (11184 bytes)
+2025-08-07 00:49:59,864 [INFO] hdr len=11184 seq=2
+2025-08-07 00:50:00,248 [INFO] saved frames\frame_00002_20250807_005000.jpg (11184 bytes)
+2025-08-07 00:50:00,336 [INFO] hdr len=11184 seq=3
+2025-08-07 00:50:00,721 [INFO] saved frames\frame_00003_20250807_005000.jpg (11184 bytes)
+2025-08-07 00:50:00,762 [INFO] hdr len=11184 seq=4
+2025-08-07 00:50:01,172 [INFO] saved frames\frame_00004_20250807_005001.jpg (11184 bytes)
+2025-08-07 00:50:01,189 [INFO] hdr len=11184 seq=5
+2025-08-07 00:50:01,578 [INFO] saved frames\frame_00005_20250807_005001.jpg (11184 bytes)
+2025-08-07 00:50:01,624 [INFO] hdr len=11184 seq=6
+2025-08-07 00:50:02,002 [INFO] saved frames\frame_00006_20250807_005002.jpg (11184 bytes)
+2025-08-07 00:50:02,044 [INFO] hdr len=11184 seq=7
+2025-08-07 00:50:02,446 [INFO] saved frames\frame_00007_20250807_005002.jpg (11184 bytes)
+2025-08-07 00:50:02,624 [INFO] hdr len=11184 seq=8
+2025-08-07 00:50:03,037 [INFO] CTRL-C in main - exit.
+2025-08-07 01:48:52,280 [INFO] listening on 0.0.0.0:12345
+2025-08-07 01:49:22,655 [INFO] client ('192.168.2.111', 16069) connected
+2025-08-07 01:49:22,659 [INFO] hdr len=9224 seq=0
+2025-08-07 01:49:22,988 [INFO] saved frames\frame_00000_20250807_014922.jpg (9224 bytes)
+2025-08-07 01:49:23,032 [INFO] hdr len=9224 seq=1
+2025-08-07 01:49:23,359 [INFO] saved frames\frame_00001_20250807_014923.jpg (9224 bytes)
+2025-08-07 01:49:23,404 [INFO] hdr len=9224 seq=2
+2025-08-07 01:49:23,723 [INFO] saved frames\frame_00002_20250807_014923.jpg (9224 bytes)
+2025-08-07 01:49:23,774 [INFO] hdr len=9224 seq=3
+2025-08-07 01:49:24,096 [INFO] saved frames\frame_00003_20250807_014924.jpg (9224 bytes)
+2025-08-07 01:49:24,144 [INFO] hdr len=9224 seq=4
+2025-08-07 01:49:24,468 [INFO] saved frames\frame_00004_20250807_014924.jpg (9224 bytes)
+2025-08-07 01:49:24,523 [INFO] hdr len=9224 seq=5
+2025-08-07 01:49:24,931 [INFO] saved frames\frame_00005_20250807_014924.jpg (9224 bytes)
+2025-08-07 01:49:25,080 [INFO] hdr len=9224 seq=6
+2025-08-07 01:49:25,326 [INFO] saved frames\frame_00006_20250807_014925.jpg (9224 bytes)
+2025-08-07 01:49:25,367 [INFO] hdr len=9224 seq=7
+2025-08-07 01:49:25,687 [INFO] saved frames\frame_00007_20250807_014925.jpg (9224 bytes)
+2025-08-07 01:49:25,740 [INFO] hdr len=9224 seq=8
+2025-08-07 01:49:26,068 [INFO] saved frames\frame_00008_20250807_014926.jpg (9224 bytes)
+2025-08-07 01:49:26,110 [INFO] hdr len=9224 seq=9
+2025-08-07 01:49:26,435 [INFO] saved frames\frame_00009_20250807_014926.jpg (9224 bytes)
+2025-08-07 01:49:26,482 [INFO] hdr len=8712 seq=10
+2025-08-07 01:49:26,786 [INFO] saved frames\frame_00010_20250807_014926.jpg (8712 bytes)
+2025-08-07 01:49:26,805 [INFO] hdr len=9224 seq=11
+2025-08-07 01:49:27,124 [INFO] saved frames\frame_00011_20250807_014927.jpg (9224 bytes)
+2025-08-07 01:49:27,180 [INFO] hdr len=9224 seq=12
+2025-08-07 01:49:27,533 [INFO] saved frames\frame_00012_20250807_014927.jpg (9224 bytes)
+2025-08-07 01:49:27,606 [INFO] hdr len=9224 seq=13
+2025-08-07 01:49:27,923 [INFO] saved frames\frame_00013_20250807_014927.jpg (9224 bytes)
+2025-08-07 01:49:27,984 [INFO] hdr len=9224 seq=14
+2025-08-07 01:49:28,294 [INFO] saved frames\frame_00014_20250807_014928.jpg (9224 bytes)
+2025-08-07 01:49:28,344 [INFO] hdr len=9224 seq=15
+2025-08-07 01:49:28,667 [INFO] saved frames\frame_00015_20250807_014928.jpg (9224 bytes)
+2025-08-07 01:49:28,722 [INFO] hdr len=9224 seq=16
+2025-08-07 01:49:29,038 [INFO] saved frames\frame_00016_20250807_014929.jpg (9224 bytes)
+2025-08-07 01:49:29,092 [INFO] hdr len=9224 seq=17
+2025-08-07 01:49:29,407 [INFO] saved frames\frame_00017_20250807_014929.jpg (9224 bytes)
+2025-08-07 01:49:52,445 [INFO] hdr len=9224 seq=17
+2025-08-07 01:49:52,448 [WARNING] seq gap: expected 18 got 17
+2025-08-07 01:49:52,451 [INFO] saved frames\frame_00017_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,452 [INFO] hdr len=9224 seq=17
+2025-08-07 01:49:52,453 [WARNING] seq gap: expected 18 got 17
+2025-08-07 01:49:52,455 [INFO] saved frames\frame_00017_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,456 [INFO] hdr len=9224 seq=18
+2025-08-07 01:49:52,458 [INFO] saved frames\frame_00018_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,459 [INFO] hdr len=9224 seq=18
+2025-08-07 01:49:52,459 [WARNING] seq gap: expected 19 got 18
+2025-08-07 01:49:52,461 [INFO] saved frames\frame_00018_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,461 [INFO] hdr len=9224 seq=18
+2025-08-07 01:49:52,461 [WARNING] seq gap: expected 19 got 18
+2025-08-07 01:49:52,463 [INFO] saved frames\frame_00018_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,463 [INFO] hdr len=9224 seq=19
+2025-08-07 01:49:52,467 [INFO] saved frames\frame_00019_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,470 [INFO] hdr len=9224 seq=19
+2025-08-07 01:49:52,470 [WARNING] seq gap: expected 20 got 19
+2025-08-07 01:49:52,472 [INFO] saved frames\frame_00019_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,473 [INFO] hdr len=9224 seq=19
+2025-08-07 01:49:52,473 [WARNING] seq gap: expected 20 got 19
+2025-08-07 01:49:52,475 [INFO] saved frames\frame_00019_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,475 [INFO] hdr len=9224 seq=20
+2025-08-07 01:49:52,477 [INFO] saved frames\frame_00020_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,478 [INFO] hdr len=9224 seq=20
+2025-08-07 01:49:52,478 [WARNING] seq gap: expected 21 got 20
+2025-08-07 01:49:52,666 [INFO] saved frames\frame_00020_20250807_014952.jpg (9224 bytes)
+2025-08-07 01:49:52,666 [INFO] hdr len=9224 seq=20
+2025-08-07 01:49:52,667 [WARNING] seq gap: expected 21 got 20
+2025-08-07 01:49:53,056 [INFO] saved frames\frame_00020_20250807_014953.jpg (9224 bytes)
+2025-08-07 01:49:53,057 [INFO] hdr len=17416 seq=21
+2025-08-07 01:49:53,574 [INFO] saved frames\frame_00021_20250807_014953.jpg (17416 bytes)
+2025-08-07 01:49:53,575 [INFO] hdr len=17416 seq=21
+2025-08-07 01:49:53,576 [WARNING] seq gap: expected 22 got 21
+2025-08-07 01:49:54,164 [INFO] saved frames\frame_00021_20250807_014954.jpg (17416 bytes)
+2025-08-07 01:49:54,166 [INFO] hdr len=17416 seq=21
+2025-08-07 01:49:54,167 [WARNING] seq gap: expected 22 got 21
+2025-08-07 01:49:54,755 [INFO] saved frames\frame_00021_20250807_014954.jpg (17416 bytes)
+2025-08-07 01:49:54,755 [INFO] hdr len=13320 seq=22
+2025-08-07 01:49:55,218 [INFO] saved frames\frame_00022_20250807_014955.jpg (13320 bytes)
+2025-08-07 01:49:55,257 [INFO] hdr len=13320 seq=22
+2025-08-07 01:49:55,258 [WARNING] seq gap: expected 23 got 22
+2025-08-07 01:50:05,376 [ERROR] client ('192.168.2.111', 16069): timed out
+2025-08-07 01:50:05,377 [INFO] connection to ('192.168.2.111', 16069) closed
+2025-08-07 01:50:25,937 [INFO] client ('192.168.2.111', 16070) connected
+2025-08-07 01:50:25,948 [INFO] hdr len=16392 seq=22
+2025-08-07 01:50:25,948 [WARNING] seq gap: expected 0 got 22
+2025-08-07 01:50:26,510 [INFO] saved frames\frame_00022_20250807_015026.jpg (16392 bytes)
+2025-08-07 01:50:26,523 [INFO] hdr len=9224 seq=23
+2025-08-07 01:50:26,848 [INFO] saved frames\frame_00023_20250807_015026.jpg (9224 bytes)
+2025-08-07 01:50:26,892 [INFO] hdr len=9224 seq=24
+2025-08-07 01:50:27,212 [INFO] saved frames\frame_00024_20250807_015027.jpg (9224 bytes)
+2025-08-07 01:50:27,262 [INFO] hdr len=9224 seq=25
+2025-08-07 01:50:28,751 [INFO] saved frames\frame_00025_20250807_015028.jpg (9224 bytes)
+2025-08-07 01:50:28,765 [INFO] hdr len=9224 seq=26
+2025-08-07 01:50:29,107 [INFO] saved frames\frame_00026_20250807_015029.jpg (9224 bytes)
+2025-08-07 01:50:29,153 [INFO] hdr len=9736 seq=27
+2025-08-07 01:50:29,562 [INFO] saved frames\frame_00027_20250807_015029.jpg (9736 bytes)
+2025-08-07 01:50:29,580 [INFO] hdr len=9736 seq=28
+2025-08-07 01:50:29,913 [INFO] saved frames\frame_00028_20250807_015029.jpg (9736 bytes)
+2025-08-07 01:50:29,947 [INFO] hdr len=9736 seq=29
+2025-08-07 01:50:30,283 [INFO] saved frames\frame_00029_20250807_015030.jpg (9736 bytes)
+2025-08-07 01:50:30,316 [INFO] hdr len=9736 seq=30
+2025-08-07 01:50:31,997 [INFO] saved frames\frame_00030_20250807_015031.jpg (9736 bytes)
+2025-08-07 01:50:32,270 [INFO] hdr len=9736 seq=31
+2025-08-07 01:50:32,607 [INFO] saved frames\frame_00031_20250807_015032.jpg (9736 bytes)
+2025-08-07 01:50:32,639 [INFO] hdr len=9736 seq=32
+2025-08-07 01:50:32,985 [INFO] saved frames\frame_00032_20250807_015032.jpg (9736 bytes)
+2025-08-07 01:50:33,013 [INFO] hdr len=9736 seq=33
+2025-08-07 01:50:33,351 [INFO] saved frames\frame_00033_20250807_015033.jpg (9736 bytes)
+2025-08-07 01:50:33,395 [INFO] hdr len=9224 seq=34
+2025-08-07 01:50:33,751 [INFO] saved frames\frame_00034_20250807_015033.jpg (9224 bytes)
+2025-08-07 01:50:33,856 [INFO] hdr len=9224 seq=35
+2025-08-07 01:50:34,294 [INFO] saved frames\frame_00035_20250807_015034.jpg (9224 bytes)
+2025-08-07 01:50:34,314 [INFO] hdr len=9224 seq=36
+2025-08-07 01:50:34,634 [INFO] saved frames\frame_00036_20250807_015034.jpg (9224 bytes)
+2025-08-07 01:50:34,682 [INFO] hdr len=9224 seq=37
+2025-08-07 01:50:35,006 [INFO] saved frames\frame_00037_20250807_015035.jpg (9224 bytes)
+2025-08-07 01:50:35,060 [INFO] hdr len=9224 seq=38
+2025-08-07 01:50:35,372 [INFO] saved frames\frame_00038_20250807_015035.jpg (9224 bytes)
+2025-08-07 01:50:35,425 [INFO] hdr len=9224 seq=39
+2025-08-07 01:50:35,742 [INFO] saved frames\frame_00039_20250807_015035.jpg (9224 bytes)
+2025-08-07 01:50:35,793 [INFO] hdr len=9224 seq=40
+2025-08-07 01:50:36,210 [INFO] saved frames\frame_00040_20250807_015036.jpg (9224 bytes)
+2025-08-07 01:50:36,246 [INFO] hdr len=9224 seq=41
+2025-08-07 01:50:36,634 [INFO] saved frames\frame_00041_20250807_015036.jpg (9224 bytes)
+2025-08-07 01:50:36,649 [INFO] hdr len=9224 seq=42
+2025-08-07 01:50:36,961 [INFO] saved frames\frame_00042_20250807_015036.jpg (9224 bytes)
+2025-08-07 01:50:37,013 [INFO] hdr len=9224 seq=43
+2025-08-07 01:50:37,338 [INFO] saved frames\frame_00043_20250807_015037.jpg (9224 bytes)
+2025-08-07 01:50:37,383 [INFO] hdr len=9224 seq=44
+2025-08-07 01:50:37,708 [INFO] saved frames\frame_00044_20250807_015037.jpg (9224 bytes)
+2025-08-07 01:50:37,759 [INFO] hdr len=9224 seq=45
+2025-08-07 01:50:38,081 [INFO] saved frames\frame_00045_20250807_015038.jpg (9224 bytes)
+2025-08-07 01:50:38,130 [INFO] hdr len=9224 seq=46
+2025-08-07 01:50:38,448 [INFO] saved frames\frame_00046_20250807_015038.jpg (9224 bytes)
+2025-08-07 01:50:38,749 [INFO] hdr len=9224 seq=47
+2025-08-07 01:50:39,078 [INFO] saved frames\frame_00047_20250807_015039.jpg (9224 bytes)
+2025-08-07 01:50:39,119 [INFO] hdr len=9224 seq=48
+2025-08-07 01:50:39,440 [INFO] saved frames\frame_00048_20250807_015039.jpg (9224 bytes)
+2025-08-07 01:50:39,739 [INFO] hdr len=9224 seq=49
+2025-08-07 01:50:40,064 [INFO] saved frames\frame_00049_20250807_015040.jpg (9224 bytes)
+2025-08-07 01:50:40,140 [INFO] hdr len=9224 seq=50
+2025-08-07 01:50:40,430 [INFO] saved frames\frame_00050_20250807_015040.jpg (9224 bytes)
+2025-08-07 01:50:40,484 [INFO] hdr len=9224 seq=51
+2025-08-07 01:50:50,489 [ERROR] client ('192.168.2.111', 16070): timed out
+2025-08-07 01:50:50,490 [INFO] connection to ('192.168.2.111', 16070) closed
+2025-08-07 01:51:16,096 [INFO] CTRL-C in main - exit.
+2025-08-07 01:51:17,160 [INFO] listening on 0.0.0.0:12345
+2025-08-07 01:51:59,741 [INFO] client ('192.168.2.111', 5180) connected
+2025-08-07 01:51:59,744 [INFO] hdr len=9736 seq=0
+2025-08-07 01:52:00,080 [INFO] saved frames\frame_00000_20250807_015200.jpg (9736 bytes)
+2025-08-07 01:52:00,122 [INFO] hdr len=9736 seq=1
+2025-08-07 01:52:00,482 [INFO] saved frames\frame_00001_20250807_015200.jpg (9736 bytes)
+2025-08-07 01:52:00,535 [INFO] hdr len=9224 seq=2
+2025-08-07 01:52:01,022 [INFO] saved frames\frame_00002_20250807_015201.jpg (9224 bytes)
+2025-08-07 01:52:01,094 [INFO] hdr len=9224 seq=3
+2025-08-07 01:52:01,389 [INFO] saved frames\frame_00003_20250807_015201.jpg (9224 bytes)
+2025-08-07 01:52:01,440 [INFO] hdr len=9224 seq=4
+2025-08-07 01:52:01,761 [INFO] saved frames\frame_00004_20250807_015201.jpg (9224 bytes)
+2025-08-07 01:52:01,821 [INFO] hdr len=9224 seq=5
+2025-08-07 01:52:02,128 [INFO] saved frames\frame_00005_20250807_015202.jpg (9224 bytes)
+2025-08-07 01:52:02,206 [INFO] hdr len=9224 seq=6
+2025-08-07 01:52:02,497 [INFO] saved frames\frame_00006_20250807_015202.jpg (9224 bytes)
+2025-08-07 01:52:02,548 [INFO] hdr len=9224 seq=7
+2025-08-07 01:52:02,872 [INFO] saved frames\frame_00007_20250807_015202.jpg (9224 bytes)
+2025-08-07 01:52:02,920 [INFO] hdr len=9224 seq=8
+2025-08-07 01:52:03,236 [INFO] saved frames\frame_00008_20250807_015203.jpg (9224 bytes)
+2025-08-07 01:52:03,287 [INFO] hdr len=9224 seq=9
+2025-08-07 01:52:03,606 [INFO] saved frames\frame_00009_20250807_015203.jpg (9224 bytes)
+2025-08-07 01:52:03,659 [INFO] hdr len=9224 seq=10
+2025-08-07 01:52:03,975 [INFO] saved frames\frame_00010_20250807_015203.jpg (9224 bytes)
+2025-08-07 01:52:04,032 [INFO] hdr len=9224 seq=11
+2025-08-07 01:52:04,345 [INFO] saved frames\frame_00011_20250807_015204.jpg (9224 bytes)
+2025-08-07 01:52:04,409 [INFO] hdr len=9224 seq=12
+2025-08-07 01:52:04,719 [INFO] saved frames\frame_00012_20250807_015204.jpg (9224 bytes)
+2025-08-07 01:52:04,766 [INFO] hdr len=9224 seq=13
+2025-08-07 01:52:05,131 [INFO] saved frames\frame_00013_20250807_015205.jpg (9224 bytes)
+2025-08-07 01:52:05,192 [INFO] hdr len=9224 seq=14
+2025-08-07 01:52:05,506 [INFO] saved frames\frame_00014_20250807_015205.jpg (9224 bytes)
+2025-08-07 01:52:05,559 [INFO] hdr len=9224 seq=15
+2025-08-07 01:52:05,878 [INFO] saved frames\frame_00015_20250807_015205.jpg (9224 bytes)
+2025-08-07 01:52:05,926 [INFO] hdr len=9224 seq=16
+2025-08-07 01:52:06,246 [INFO] saved frames\frame_00016_20250807_015206.jpg (9224 bytes)
+2025-08-07 01:52:06,297 [INFO] hdr len=9224 seq=17
+2025-08-07 01:52:06,615 [INFO] saved frames\frame_00017_20250807_015206.jpg (9224 bytes)
+2025-08-07 01:52:06,668 [INFO] hdr len=9224 seq=18
+2025-08-07 01:52:07,012 [INFO] saved frames\frame_00018_20250807_015207.jpg (9224 bytes)
+2025-08-07 01:52:07,038 [INFO] hdr len=9224 seq=19
+2025-08-07 01:52:07,355 [INFO] saved frames\frame_00019_20250807_015207.jpg (9224 bytes)
+2025-08-07 01:52:07,408 [INFO] hdr len=9224 seq=20
+2025-08-07 01:52:07,725 [INFO] saved frames\frame_00020_20250807_015207.jpg (9224 bytes)
+2025-08-07 01:52:07,776 [INFO] hdr len=10248 seq=21
+2025-08-07 01:52:08,130 [INFO] saved frames\frame_00021_20250807_015208.jpg (10248 bytes)
+2025-08-07 01:52:08,146 [INFO] hdr len=11784 seq=22
+2025-08-07 01:52:08,555 [INFO] saved frames\frame_00022_20250807_015208.jpg (11784 bytes)
+2025-08-07 01:52:08,568 [INFO] hdr len=12808 seq=23
+2025-08-07 01:52:09,025 [INFO] saved frames\frame_00023_20250807_015209.jpg (12808 bytes)
+2025-08-07 01:52:09,042 [INFO] hdr len=15368 seq=24
+2025-08-07 01:52:09,570 [INFO] saved frames\frame_00024_20250807_015209.jpg (15368 bytes)
+2025-08-07 01:52:09,622 [INFO] hdr len=16392 seq=25
+2025-08-07 01:52:10,489 [INFO] saved frames\frame_00025_20250807_015210.jpg (16392 bytes)
+2025-08-07 01:52:10,523 [INFO] hdr len=8712 seq=26
+2025-08-07 01:52:10,949 [INFO] saved frames\frame_00026_20250807_015210.jpg (8712 bytes)
+2025-08-07 01:52:11,015 [INFO] hdr len=8712 seq=27
+2025-08-07 01:52:11,291 [INFO] saved frames\frame_00027_20250807_015211.jpg (8712 bytes)
+2025-08-07 01:52:11,358 [INFO] hdr len=8712 seq=28
+2025-08-07 01:52:11,656 [INFO] saved frames\frame_00028_20250807_015211.jpg (8712 bytes)
+2025-08-07 01:52:11,669 [INFO] hdr len=10248 seq=29
+2025-08-07 01:52:12,026 [INFO] saved frames\frame_00029_20250807_015212.jpg (10248 bytes)
+2025-08-07 01:52:12,040 [INFO] hdr len=10248 seq=30
+2025-08-07 01:52:12,394 [INFO] saved frames\frame_00030_20250807_015212.jpg (10248 bytes)
+2025-08-07 01:52:12,411 [INFO] hdr len=10248 seq=31
+2025-08-07 01:52:12,769 [INFO] saved frames\frame_00031_20250807_015212.jpg (10248 bytes)
+2025-08-07 01:52:12,782 [INFO] hdr len=10760 seq=32
+2025-08-07 01:52:13,153 [INFO] saved frames\frame_00032_20250807_015213.jpg (10760 bytes)
+2025-08-07 01:52:13,201 [INFO] hdr len=8712 seq=33
+2025-08-07 01:52:13,502 [INFO] saved frames\frame_00033_20250807_015213.jpg (8712 bytes)
+2025-08-07 01:52:13,522 [INFO] hdr len=11784 seq=34
+2025-08-07 01:52:13,927 [INFO] saved frames\frame_00034_20250807_015213.jpg (11784 bytes)
+2025-08-07 01:52:13,936 [INFO] hdr len=12296 seq=35
+2025-08-07 01:52:14,423 [INFO] saved frames\frame_00035_20250807_015214.jpg (12296 bytes)
+2025-08-07 01:52:14,461 [INFO] hdr len=9736 seq=36
+2025-08-07 01:52:14,802 [INFO] saved frames\frame_00036_20250807_015214.jpg (9736 bytes)
+2025-08-07 01:52:14,830 [INFO] hdr len=11784 seq=37
+2025-08-07 01:52:15,240 [INFO] saved frames\frame_00037_20250807_015215.jpg (11784 bytes)
+2025-08-07 01:52:15,254 [INFO] hdr len=20488 seq=38
+2025-08-07 01:52:15,954 [INFO] saved frames\frame_00038_20250807_015215.jpg (20488 bytes)
+2025-08-07 01:52:15,993 [INFO] hdr len=25608 seq=39
+2025-08-07 01:52:16,884 [INFO] saved frames\frame_00039_20250807_015216.jpg (25608 bytes)
+2025-08-07 01:52:16,936 [INFO] hdr len=16904 seq=40
+2025-08-07 01:52:17,521 [INFO] saved frames\frame_00040_20250807_015217.jpg (16904 bytes)
+2025-08-07 01:52:17,570 [INFO] hdr len=21000 seq=41
+2025-08-07 01:52:18,319 [INFO] saved frames\frame_00041_20250807_015218.jpg (21000 bytes)
+2025-08-07 01:52:18,354 [INFO] hdr len=23560 seq=42
+2025-08-07 01:52:19,295 [INFO] saved frames\frame_00042_20250807_015219.jpg (23560 bytes)
+2025-08-07 01:52:19,311 [INFO] hdr len=13832 seq=43
+2025-08-07 01:52:19,793 [INFO] saved frames\frame_00043_20250807_015219.jpg (13832 bytes)
+2025-08-07 01:52:19,839 [INFO] hdr len=9736 seq=44
+2025-08-07 01:52:20,180 [INFO] saved frames\frame_00044_20250807_015220.jpg (9736 bytes)
+2025-08-07 01:52:20,212 [INFO] hdr len=9736 seq=45
+2025-08-07 01:52:20,565 [INFO] saved frames\frame_00045_20250807_015220.jpg (9736 bytes)
+2025-08-07 01:52:20,579 [INFO] hdr len=8712 seq=46
+2025-08-07 01:52:20,881 [INFO] saved frames\frame_00046_20250807_015220.jpg (8712 bytes)
+2025-08-07 01:52:20,899 [INFO] hdr len=11272 seq=47
+2025-08-07 01:52:21,288 [INFO] saved frames\frame_00047_20250807_015221.jpg (11272 bytes)
+2025-08-07 01:52:21,333 [INFO] hdr len=12296 seq=48
+2025-08-07 01:52:21,782 [INFO] saved frames\frame_00048_20250807_015221.jpg (12296 bytes)
+2025-08-07 01:52:21,802 [INFO] hdr len=13832 seq=49
+2025-08-07 01:52:22,357 [INFO] saved frames\frame_00049_20250807_015222.jpg (13832 bytes)
+2025-08-07 01:52:22,377 [INFO] hdr len=14344 seq=50
+2025-08-07 01:52:22,872 [INFO] saved frames\frame_00050_20250807_015222.jpg (14344 bytes)
+2025-08-07 01:52:22,911 [INFO] hdr len=14344 seq=51
+2025-08-07 01:52:23,405 [INFO] saved frames\frame_00051_20250807_015223.jpg (14344 bytes)
+2025-08-07 01:52:23,438 [INFO] hdr len=15368 seq=52
+2025-08-07 01:52:23,970 [INFO] saved frames\frame_00052_20250807_015223.jpg (15368 bytes)
+2025-08-07 01:52:24,019 [INFO] hdr len=13832 seq=53
+2025-08-07 01:52:24,499 [INFO] saved frames\frame_00053_20250807_015224.jpg (13832 bytes)
+2025-08-07 01:52:24,552 [INFO] hdr len=10248 seq=54
+2025-08-07 01:52:24,910 [INFO] saved frames\frame_00054_20250807_015224.jpg (10248 bytes)
+2025-08-07 01:52:24,968 [INFO] hdr len=11272 seq=55
+2025-08-07 01:52:25,355 [INFO] saved frames\frame_00055_20250807_015225.jpg (11272 bytes)
+2025-08-07 01:52:25,400 [INFO] hdr len=11272 seq=56
+2025-08-07 01:52:25,789 [INFO] saved frames\frame_00056_20250807_015225.jpg (11272 bytes)
+2025-08-07 01:52:25,819 [INFO] hdr len=11272 seq=57
+2025-08-07 01:52:26,213 [INFO] saved frames\frame_00057_20250807_015226.jpg (11272 bytes)
+2025-08-07 01:52:26,241 [INFO] hdr len=10760 seq=58
+2025-08-07 01:52:26,613 [INFO] saved frames\frame_00058_20250807_015226.jpg (10760 bytes)
+2025-08-07 01:52:26,666 [INFO] hdr len=11272 seq=59
+2025-08-07 01:52:27,067 [INFO] saved frames\frame_00059_20250807_015227.jpg (11272 bytes)
+2025-08-07 01:52:27,090 [INFO] hdr len=11272 seq=60
+2025-08-07 01:52:27,484 [INFO] saved frames\frame_00060_20250807_015227.jpg (11272 bytes)
+2025-08-07 01:52:27,517 [INFO] hdr len=11272 seq=61
+2025-08-07 01:52:27,911 [INFO] saved frames\frame_00061_20250807_015227.jpg (11272 bytes)
+2025-08-07 01:52:27,941 [INFO] hdr len=9736 seq=62
+2025-08-07 01:52:28,278 [INFO] saved frames\frame_00062_20250807_015228.jpg (9736 bytes)
+2025-08-07 01:52:28,311 [INFO] hdr len=9224 seq=63
+2025-08-07 01:52:28,628 [INFO] saved frames\frame_00063_20250807_015228.jpg (9224 bytes)
+2025-08-07 01:52:28,680 [INFO] hdr len=8712 seq=64
+2025-08-07 01:52:28,986 [INFO] saved frames\frame_00064_20250807_015228.jpg (8712 bytes)
+2025-08-07 01:52:28,999 [INFO] hdr len=9224 seq=65
+2025-08-07 01:52:29,331 [INFO] saved frames\frame_00065_20250807_015229.jpg (9224 bytes)
+2025-08-07 01:52:29,387 [INFO] hdr len=8712 seq=66
+2025-08-07 01:52:29,675 [INFO] saved frames\frame_00066_20250807_015229.jpg (8712 bytes)
+2025-08-07 01:52:29,692 [INFO] hdr len=8200 seq=67
+2025-08-07 01:52:29,987 [INFO] saved frames\frame_00067_20250807_015229.jpg (8200 bytes)
+2025-08-07 01:52:30,013 [INFO] hdr len=8200 seq=68
+2025-08-07 01:52:30,296 [INFO] saved frames\frame_00068_20250807_015230.jpg (8200 bytes)
+2025-08-07 01:52:30,331 [INFO] hdr len=8200 seq=69
+2025-08-07 01:52:30,615 [INFO] saved frames\frame_00069_20250807_015230.jpg (8200 bytes)
+2025-08-07 01:52:30,658 [INFO] hdr len=8200 seq=70
+2025-08-07 01:52:30,935 [INFO] saved frames\frame_00070_20250807_015230.jpg (8200 bytes)
+2025-08-07 01:52:30,978 [INFO] hdr len=8712 seq=71
+2025-08-07 01:52:31,350 [INFO] saved frames\frame_00071_20250807_015231.jpg (8712 bytes)
+2025-08-07 01:52:31,438 [INFO] hdr len=9224 seq=72
+2025-08-07 01:52:31,716 [INFO] saved frames\frame_00072_20250807_015231.jpg (9224 bytes)
+2025-08-07 01:52:31,764 [INFO] hdr len=9736 seq=73
+2025-08-07 01:52:32,103 [INFO] saved frames\frame_00073_20250807_015232.jpg (9736 bytes)
+2025-08-07 01:52:32,135 [INFO] hdr len=9736 seq=74
+2025-08-07 01:52:32,472 [INFO] saved frames\frame_00074_20250807_015232.jpg (9736 bytes)
+2025-08-07 01:52:32,507 [INFO] hdr len=9736 seq=75
+2025-08-07 01:52:32,855 [INFO] saved frames\frame_00075_20250807_015232.jpg (9736 bytes)
+2025-08-07 01:52:32,881 [INFO] hdr len=9736 seq=76
+2025-08-07 01:52:33,219 [INFO] saved frames\frame_00076_20250807_015233.jpg (9736 bytes)
+2025-08-07 01:52:33,247 [INFO] hdr len=9736 seq=77
+2025-08-07 01:52:33,583 [INFO] saved frames\frame_00077_20250807_015233.jpg (9736 bytes)
+2025-08-07 01:52:33,616 [INFO] hdr len=9736 seq=78
+2025-08-07 01:52:33,956 [INFO] saved frames\frame_00078_20250807_015233.jpg (9736 bytes)
+2025-08-07 01:52:33,985 [INFO] hdr len=9736 seq=79
+2025-08-07 01:52:34,325 [INFO] saved frames\frame_00079_20250807_015234.jpg (9736 bytes)
+2025-08-07 01:52:34,359 [INFO] hdr len=9736 seq=80
+2025-08-07 01:52:34,692 [INFO] saved frames\frame_00080_20250807_015234.jpg (9736 bytes)
+2025-08-07 01:52:34,724 [INFO] hdr len=9736 seq=81
+2025-08-07 01:52:35,064 [INFO] saved frames\frame_00081_20250807_015235.jpg (9736 bytes)
+2025-08-07 01:52:35,100 [INFO] hdr len=9736 seq=82
+2025-08-07 01:52:35,432 [INFO] saved frames\frame_00082_20250807_015235.jpg (9736 bytes)
+2025-08-07 01:52:35,477 [INFO] hdr len=9736 seq=83
+2025-08-07 01:52:35,881 [INFO] saved frames\frame_00083_20250807_015235.jpg (9736 bytes)
+2025-08-07 01:52:35,969 [INFO] hdr len=9736 seq=84
+2025-08-07 01:52:36,280 [INFO] saved frames\frame_00084_20250807_015236.jpg (9736 bytes)
+2025-08-07 01:52:36,306 [INFO] hdr len=9736 seq=85
+2025-08-07 01:52:36,646 [INFO] saved frames\frame_00085_20250807_015236.jpg (9736 bytes)
+2025-08-07 01:52:36,679 [INFO] hdr len=9736 seq=86
+2025-08-07 01:52:37,012 [INFO] saved frames\frame_00086_20250807_015237.jpg (9736 bytes)
+2025-08-07 01:52:37,046 [INFO] hdr len=9224 seq=87
+2025-08-07 01:52:37,412 [INFO] saved frames\frame_00087_20250807_015237.jpg (9224 bytes)
+2025-08-07 01:52:37,560 [INFO] hdr len=9736 seq=88
+2025-08-07 01:52:37,809 [INFO] saved frames\frame_00088_20250807_015237.jpg (9736 bytes)
+2025-08-07 01:52:37,889 [INFO] hdr len=9736 seq=89
+2025-08-07 01:52:38,272 [INFO] saved frames\frame_00089_20250807_015238.jpg (9736 bytes)
+2025-08-07 01:52:38,308 [INFO] hdr len=9736 seq=90
+2025-08-07 01:52:38,646 [INFO] saved frames\frame_00090_20250807_015238.jpg (9736 bytes)
+2025-08-07 01:52:38,683 [INFO] hdr len=9736 seq=91
+2025-08-07 01:52:39,014 [INFO] saved frames\frame_00091_20250807_015239.jpg (9736 bytes)
+2025-08-07 01:52:51,514 [INFO] hdr len=9736 seq=91
+2025-08-07 01:52:51,522 [WARNING] seq gap: expected 92 got 91
+2025-08-07 01:52:51,524 [INFO] saved frames\frame_00091_20250807_015251.jpg (9736 bytes)
+2025-08-07 01:52:51,525 [INFO] hdr len=9736 seq=91
+2025-08-07 01:52:51,526 [WARNING] seq gap: expected 92 got 91
+2025-08-07 01:52:51,529 [INFO] saved frames\frame_00091_20250807_015251.jpg (9736 bytes)
+2025-08-07 01:52:51,529 [INFO] hdr len=9736 seq=92
+2025-08-07 01:52:51,531 [INFO] saved frames\frame_00092_20250807_015251.jpg (9736 bytes)
+2025-08-07 01:52:51,532 [INFO] hdr len=9736 seq=92
+2025-08-07 01:52:51,533 [WARNING] seq gap: expected 93 got 92
+2025-08-07 01:52:51,534 [INFO] saved frames\frame_00092_20250807_015251.jpg (9736 bytes)
+2025-08-07 01:52:51,534 [INFO] hdr len=9736 seq=92
+2025-08-07 01:52:51,534 [WARNING] seq gap: expected 93 got 92
+2025-08-07 01:52:51,536 [INFO] saved frames\frame_00092_20250807_015251.jpg (9736 bytes)
+2025-08-07 01:52:51,549 [INFO] hdr len=9224 seq=93
+2025-08-07 01:52:51,860 [INFO] saved frames\frame_00093_20250807_015251.jpg (9224 bytes)
+2025-08-07 01:52:51,861 [INFO] hdr len=9224 seq=93
+2025-08-07 01:52:51,862 [WARNING] seq gap: expected 94 got 93
+2025-08-07 01:52:52,176 [INFO] saved frames\frame_00093_20250807_015252.jpg (9224 bytes)
+2025-08-07 01:52:52,176 [INFO] hdr len=9224 seq=93
+2025-08-07 01:52:52,178 [WARNING] seq gap: expected 94 got 93
+2025-08-07 01:52:52,488 [INFO] saved frames\frame_00093_20250807_015252.jpg (9224 bytes)
+2025-08-07 01:52:52,489 [INFO] hdr len=9224 seq=94
+2025-08-07 01:52:52,806 [INFO] saved frames\frame_00094_20250807_015252.jpg (9224 bytes)
+2025-08-07 01:52:52,807 [INFO] hdr len=9224 seq=94
+2025-08-07 01:52:52,808 [WARNING] seq gap: expected 95 got 94
+2025-08-07 01:52:53,123 [INFO] saved frames\frame_00094_20250807_015253.jpg (9224 bytes)
+2025-08-07 01:52:53,123 [INFO] hdr len=9224 seq=94
+2025-08-07 01:52:53,124 [WARNING] seq gap: expected 95 got 94
+2025-08-07 01:52:53,436 [INFO] saved frames\frame_00094_20250807_015253.jpg (9224 bytes)
+2025-08-07 01:52:53,437 [INFO] hdr len=9736 seq=95
+2025-08-07 01:52:53,768 [INFO] saved frames\frame_00095_20250807_015253.jpg (9736 bytes)
+2025-08-07 01:52:53,769 [INFO] hdr len=9736 seq=95
+2025-08-07 01:52:53,769 [WARNING] seq gap: expected 96 got 95
+2025-08-07 01:52:54,204 [INFO] saved frames\frame_00095_20250807_015254.jpg (9736 bytes)
+2025-08-07 01:52:54,204 [INFO] hdr len=9736 seq=95
+2025-08-07 01:52:54,205 [WARNING] seq gap: expected 96 got 95
+2025-08-07 01:52:54,453 [INFO] saved frames\frame_00095_20250807_015254.jpg (9736 bytes)
+2025-08-07 01:52:54,454 [INFO] hdr len=9736 seq=96
+2025-08-07 01:52:54,766 [INFO] saved frames\frame_00096_20250807_015254.jpg (9736 bytes)
+2025-08-07 01:52:54,767 [INFO] hdr len=9736 seq=96
+2025-08-07 01:52:54,768 [WARNING] seq gap: expected 97 got 96
+2025-08-07 01:52:55,100 [INFO] saved frames\frame_00096_20250807_015255.jpg (9736 bytes)
+2025-08-07 01:52:55,103 [INFO] hdr len=9736 seq=96
+2025-08-07 01:52:55,103 [WARNING] seq gap: expected 97 got 96
+2025-08-07 01:52:55,432 [INFO] saved frames\frame_00096_20250807_015255.jpg (9736 bytes)
+2025-08-07 01:52:55,440 [INFO] hdr len=9736 seq=97
+2025-08-07 01:52:55,767 [INFO] saved frames\frame_00097_20250807_015255.jpg (9736 bytes)
+2025-08-07 01:52:55,768 [INFO] hdr len=9736 seq=97
+2025-08-07 01:52:55,769 [WARNING] seq gap: expected 98 got 97
+2025-08-07 01:52:56,104 [INFO] saved frames\frame_00097_20250807_015256.jpg (9736 bytes)
+2025-08-07 01:52:56,105 [INFO] hdr len=9736 seq=97
+2025-08-07 01:52:56,106 [WARNING] seq gap: expected 98 got 97
+2025-08-07 01:52:56,470 [INFO] saved frames\frame_00097_20250807_015256.jpg (9736 bytes)
+2025-08-07 01:52:56,471 [INFO] hdr len=9736 seq=98
+2025-08-07 01:52:56,775 [INFO] saved frames\frame_00098_20250807_015256.jpg (9736 bytes)
+2025-08-07 01:52:56,775 [INFO] hdr len=9736 seq=98
+2025-08-07 01:52:56,776 [WARNING] seq gap: expected 99 got 98
+2025-08-07 01:52:57,099 [INFO] saved frames\frame_00098_20250807_015257.jpg (9736 bytes)
+2025-08-07 01:52:57,099 [INFO] hdr len=9736 seq=98
+2025-08-07 01:52:57,099 [WARNING] seq gap: expected 99 got 98
+2025-08-07 01:52:57,446 [INFO] saved frames\frame_00098_20250807_015257.jpg (9736 bytes)
+2025-08-07 01:52:57,451 [INFO] hdr len=9736 seq=99
+2025-08-07 01:52:57,765 [INFO] saved frames\frame_00099_20250807_015257.jpg (9736 bytes)
+2025-08-07 01:52:57,766 [INFO] hdr len=9736 seq=99
+2025-08-07 01:52:57,767 [WARNING] seq gap: expected 100 got 99
+2025-08-07 01:52:58,098 [INFO] saved frames\frame_00099_20250807_015258.jpg (9736 bytes)
+2025-08-07 01:52:58,099 [INFO] hdr len=9736 seq=99
+2025-08-07 01:52:58,100 [WARNING] seq gap: expected 100 got 99
+2025-08-07 01:52:58,430 [INFO] saved frames\frame_00099_20250807_015258.jpg (9736 bytes)
+2025-08-07 01:52:58,436 [INFO] hdr len=9736 seq=100
+2025-08-07 01:52:58,772 [INFO] saved frames\frame_00100_20250807_015258.jpg (9736 bytes)
+2025-08-07 01:52:58,773 [INFO] hdr len=9736 seq=100
+2025-08-07 01:52:58,774 [WARNING] seq gap: expected 101 got 100
+2025-08-07 01:52:59,099 [INFO] saved frames\frame_00100_20250807_015259.jpg (9736 bytes)
+2025-08-07 01:52:59,100 [INFO] hdr len=9736 seq=100
+2025-08-07 01:52:59,102 [WARNING] seq gap: expected 101 got 100
+2025-08-07 01:52:59,433 [INFO] saved frames\frame_00100_20250807_015259.jpg (9736 bytes)
+2025-08-07 01:52:59,436 [INFO] hdr len=9224 seq=101
+2025-08-07 01:52:59,744 [INFO] saved frames\frame_00101_20250807_015259.jpg (9224 bytes)
+2025-08-07 01:52:59,747 [INFO] hdr len=9224 seq=101
+2025-08-07 01:52:59,747 [WARNING] seq gap: expected 102 got 101
+2025-08-07 01:53:00,064 [INFO] saved frames\frame_00101_20250807_015300.jpg (9224 bytes)
+2025-08-07 01:53:00,065 [INFO] hdr len=9224 seq=101
+2025-08-07 01:53:00,066 [WARNING] seq gap: expected 102 got 101
+2025-08-07 01:53:00,376 [INFO] saved frames\frame_00101_20250807_015300.jpg (9224 bytes)
+2025-08-07 01:53:00,377 [INFO] hdr len=9224 seq=102
+2025-08-07 01:53:00,698 [INFO] saved frames\frame_00102_20250807_015300.jpg (9224 bytes)
+2025-08-07 01:53:02,665 [INFO] hdr len=9224 seq=102
+2025-08-07 01:53:02,667 [WARNING] seq gap: expected 103 got 102
+2025-08-07 01:53:02,669 [INFO] saved frames\frame_00102_20250807_015302.jpg (9224 bytes)
+2025-08-07 01:53:02,670 [INFO] hdr len=9224 seq=102
+2025-08-07 01:53:02,670 [WARNING] seq gap: expected 103 got 102
+2025-08-07 01:53:02,671 [INFO] saved frames\frame_00102_20250807_015302.jpg (9224 bytes)
+2025-08-07 01:53:02,672 [INFO] hdr len=9736 seq=103
+2025-08-07 01:53:02,674 [INFO] saved frames\frame_00103_20250807_015302.jpg (9736 bytes)
+2025-08-07 01:53:02,675 [INFO] hdr len=9736 seq=103
+2025-08-07 01:53:02,676 [WARNING] seq gap: expected 104 got 103
+2025-08-07 01:53:02,676 [INFO] saved frames\frame_00103_20250807_015302.jpg (9736 bytes)
+2025-08-07 01:53:02,677 [INFO] hdr len=9736 seq=103
+2025-08-07 01:53:02,678 [WARNING] seq gap: expected 104 got 103
+2025-08-07 01:53:02,678 [INFO] saved frames\frame_00103_20250807_015302.jpg (9736 bytes)
+2025-08-07 01:53:02,740 [INFO] hdr len=9736 seq=104
+2025-08-07 01:53:03,074 [INFO] saved frames\frame_00104_20250807_015303.jpg (9736 bytes)
+2025-08-07 01:53:03,074 [INFO] hdr len=9736 seq=104
+2025-08-07 01:53:03,075 [WARNING] seq gap: expected 105 got 104
+2025-08-07 01:53:03,413 [INFO] saved frames\frame_00104_20250807_015303.jpg (9736 bytes)
+2025-08-07 01:53:03,414 [INFO] hdr len=9736 seq=104
+2025-08-07 01:53:03,415 [WARNING] seq gap: expected 105 got 104
+2025-08-07 01:53:03,810 [INFO] saved frames\frame_00104_20250807_015303.jpg (9736 bytes)
+2025-08-07 01:53:20,711 [INFO] hdr len=9224 seq=105
+2025-08-07 01:53:20,724 [INFO] saved frames\frame_00105_20250807_015320.jpg (9224 bytes)
+2025-08-07 01:53:20,725 [INFO] hdr len=9224 seq=105
+2025-08-07 01:53:20,726 [WARNING] seq gap: expected 106 got 105
+2025-08-07 01:53:20,728 [INFO] saved frames\frame_00105_20250807_015320.jpg (9224 bytes)
+2025-08-07 01:53:20,728 [INFO] hdr len=9224 seq=105
+2025-08-07 01:53:20,729 [WARNING] seq gap: expected 106 got 105
+2025-08-07 01:53:20,730 [INFO] saved frames\frame_00105_20250807_015320.jpg (9224 bytes)
+2025-08-07 01:53:20,731 [INFO] hdr len=9736 seq=106
+2025-08-07 01:53:20,733 [INFO] saved frames\frame_00106_20250807_015320.jpg (9736 bytes)
+2025-08-07 01:53:20,734 [INFO] hdr len=9736 seq=106
+2025-08-07 01:53:20,735 [WARNING] seq gap: expected 107 got 106
+2025-08-07 01:53:20,736 [INFO] saved frames\frame_00106_20250807_015320.jpg (9736 bytes)
+2025-08-07 01:53:20,737 [INFO] hdr len=9736 seq=106
+2025-08-07 01:53:20,737 [WARNING] seq gap: expected 107 got 106
+2025-08-07 01:53:20,739 [INFO] saved frames\frame_00106_20250807_015320.jpg (9736 bytes)
+2025-08-07 01:53:20,742 [INFO] hdr len=9736 seq=107
+2025-08-07 01:53:20,744 [INFO] saved frames\frame_00107_20250807_015320.jpg (9736 bytes)
+2025-08-07 01:53:20,745 [INFO] hdr len=9736 seq=107
+2025-08-07 01:53:20,745 [WARNING] seq gap: expected 108 got 107
+2025-08-07 01:53:20,746 [INFO] saved frames\frame_00107_20250807_015320.jpg (9736 bytes)
+2025-08-07 01:53:20,746 [INFO] hdr len=9736 seq=107
+2025-08-07 01:53:20,747 [WARNING] seq gap: expected 108 got 107
+2025-08-07 01:53:20,747 [INFO] saved frames\frame_00107_20250807_015320.jpg (9736 bytes)
+2025-08-07 01:53:20,748 [INFO] hdr len=9224 seq=108
+2025-08-07 01:53:20,749 [INFO] saved frames\frame_00108_20250807_015320.jpg (9224 bytes)
+2025-08-07 01:53:20,750 [INFO] hdr len=9224 seq=108
+2025-08-07 01:53:20,750 [WARNING] seq gap: expected 109 got 108
+2025-08-07 01:53:20,751 [INFO] saved frames\frame_00108_20250807_015320.jpg (9224 bytes)
+2025-08-07 01:53:20,764 [INFO] hdr len=9224 seq=108
+2025-08-07 01:53:20,764 [WARNING] seq gap: expected 109 got 108
+2025-08-07 01:53:21,159 [INFO] saved frames\frame_00108_20250807_015321.jpg (9224 bytes)
+2025-08-07 01:53:21,160 [INFO] hdr len=9736 seq=109
+2025-08-07 01:53:21,414 [INFO] saved frames\frame_00109_20250807_015321.jpg (9736 bytes)
+2025-08-07 01:53:21,418 [INFO] hdr len=9736 seq=109
+2025-08-07 01:53:21,420 [WARNING] seq gap: expected 110 got 109
+2025-08-07 01:53:21,745 [INFO] saved frames\frame_00109_20250807_015321.jpg (9736 bytes)
+2025-08-07 01:53:21,746 [INFO] hdr len=9736 seq=109
+2025-08-07 01:53:21,746 [WARNING] seq gap: expected 110 got 109
+2025-08-07 01:53:22,084 [INFO] saved frames\frame_00109_20250807_015322.jpg (9736 bytes)
+2025-08-07 01:53:22,084 [INFO] hdr len=9224 seq=110
+2025-08-07 01:53:22,395 [INFO] saved frames\frame_00110_20250807_015322.jpg (9224 bytes)
+2025-08-07 01:53:22,396 [INFO] hdr len=9224 seq=110
+2025-08-07 01:53:22,397 [WARNING] seq gap: expected 111 got 110
+2025-08-07 01:53:22,707 [INFO] saved frames\frame_00110_20250807_015322.jpg (9224 bytes)
+2025-08-07 01:53:22,710 [INFO] hdr len=9224 seq=110
+2025-08-07 01:53:22,710 [WARNING] seq gap: expected 111 got 110
+2025-08-07 01:53:23,027 [INFO] saved frames\frame_00110_20250807_015323.jpg (9224 bytes)
+2025-08-07 01:53:23,028 [INFO] hdr len=9224 seq=111
+2025-08-07 01:53:33,174 [ERROR] client ('192.168.2.111', 5180): timed out
+2025-08-07 01:53:33,175 [INFO] connection to ('192.168.2.111', 5180) closed
+2025-08-07 02:02:22,362 [INFO] CTRL-C in main - exit.
+2025-08-07 02:02:24,364 [INFO] listening on 0.0.0.0:12345
+2025-08-07 02:02:50,943 [INFO] client ('192.168.2.111', 4570) connected
+2025-08-07 02:02:50,945 [INFO] hdr len=9224 seq=0
+2025-08-07 02:02:51,286 [INFO] saved frames\frame_00000_20250807_020251.jpg (9224 bytes)
+2025-08-07 02:02:51,315 [INFO] hdr len=9224 seq=1
+2025-08-07 02:02:51,315 [WARNING] seq gap: expected 0 got 1
+2025-08-07 02:02:51,642 [INFO] saved frames\frame_00001_20250807_020251.jpg (9224 bytes)
+2025-08-07 02:02:51,688 [INFO] hdr len=9224 seq=2
+2025-08-07 02:02:51,690 [WARNING] seq gap: expected 1 got 2
+2025-08-07 02:02:52,012 [INFO] saved frames\frame_00002_20250807_020252.jpg (9224 bytes)
+2025-08-07 02:02:52,065 [INFO] hdr len=9224 seq=3
+2025-08-07 02:02:52,066 [WARNING] seq gap: expected 2 got 3
+2025-08-07 02:02:52,385 [INFO] saved frames\frame_00003_20250807_020252.jpg (9224 bytes)
+2025-08-07 02:02:52,437 [INFO] hdr len=9224 seq=4
+2025-08-07 02:02:52,437 [WARNING] seq gap: expected 3 got 4
+2025-08-07 02:02:52,862 [INFO] saved frames\frame_00004_20250807_020252.jpg (9224 bytes)
+2025-08-07 02:02:52,923 [INFO] hdr len=9224 seq=5
+2025-08-07 02:02:52,924 [WARNING] seq gap: expected 4 got 5
+2025-08-07 02:02:53,235 [INFO] saved frames\frame_00005_20250807_020253.jpg (9224 bytes)
+2025-08-07 02:02:53,285 [INFO] hdr len=9224 seq=6
+2025-08-07 02:02:53,287 [WARNING] seq gap: expected 5 got 6
+2025-08-07 02:02:53,611 [INFO] saved frames\frame_00006_20250807_020253.jpg (9224 bytes)
+2025-08-07 02:02:53,715 [INFO] hdr len=9224 seq=7
+2025-08-07 02:02:53,715 [WARNING] seq gap: expected 6 got 7
+2025-08-07 02:02:54,030 [INFO] saved frames\frame_00007_20250807_020254.jpg (9224 bytes)
+2025-08-07 02:02:54,093 [INFO] hdr len=9224 seq=8
+2025-08-07 02:02:54,094 [WARNING] seq gap: expected 7 got 8
+2025-08-07 02:02:54,405 [INFO] saved frames\frame_00008_20250807_020254.jpg (9224 bytes)
+2025-08-07 02:02:54,454 [INFO] hdr len=8712 seq=9
+2025-08-07 02:02:54,455 [WARNING] seq gap: expected 8 got 9
+2025-08-07 02:02:54,757 [INFO] saved frames\frame_00009_20250807_020254.jpg (8712 bytes)
+2025-08-07 02:02:54,771 [INFO] hdr len=8712 seq=10
+2025-08-07 02:02:54,772 [WARNING] seq gap: expected 9 got 10
+2025-08-07 02:02:55,074 [INFO] saved frames\frame_00010_20250807_020255.jpg (8712 bytes)
+2025-08-07 02:02:55,126 [INFO] hdr len=9224 seq=11
+2025-08-07 02:02:55,127 [WARNING] seq gap: expected 10 got 11
+2025-08-07 02:02:55,406 [INFO] saved frames\frame_00011_20250807_020255.jpg (9224 bytes)
+2025-08-07 02:02:55,455 [INFO] hdr len=8712 seq=12
+2025-08-07 02:02:55,455 [WARNING] seq gap: expected 11 got 12
+2025-08-07 02:02:55,843 [INFO] saved frames\frame_00012_20250807_020255.jpg (8712 bytes)
+2025-08-07 02:02:56,007 [INFO] hdr len=9224 seq=13
+2025-08-07 02:02:56,008 [WARNING] seq gap: expected 12 got 13
+2025-08-07 02:02:56,250 [INFO] saved frames\frame_00013_20250807_020256.jpg (9224 bytes)
+2025-08-07 02:02:56,299 [INFO] hdr len=9224 seq=14
+2025-08-07 02:02:56,300 [WARNING] seq gap: expected 13 got 14
+2025-08-07 02:02:56,618 [INFO] saved frames\frame_00014_20250807_020256.jpg (9224 bytes)
+2025-08-07 02:02:56,663 [INFO] hdr len=9224 seq=15
+2025-08-07 02:02:56,678 [WARNING] seq gap: expected 14 got 15
+2025-08-07 02:02:56,982 [INFO] saved frames\frame_00015_20250807_020256.jpg (9224 bytes)
+2025-08-07 02:02:57,033 [INFO] hdr len=9224 seq=16
+2025-08-07 02:02:57,034 [WARNING] seq gap: expected 15 got 16
+2025-08-07 02:02:57,354 [INFO] saved frames\frame_00016_20250807_020257.jpg (9224 bytes)
+2025-08-07 02:02:57,402 [INFO] hdr len=8712 seq=17
+2025-08-07 02:02:57,402 [WARNING] seq gap: expected 16 got 17
+2025-08-07 02:02:57,820 [INFO] saved frames\frame_00017_20250807_020257.jpg (8712 bytes)
+2025-08-07 02:02:57,869 [INFO] hdr len=9224 seq=18
+2025-08-07 02:02:57,871 [WARNING] seq gap: expected 17 got 18
+2025-08-07 02:02:58,286 [INFO] saved frames\frame_00018_20250807_020258.jpg (9224 bytes)
+2025-08-07 02:02:58,300 [INFO] hdr len=8712 seq=19
+2025-08-07 02:02:58,302 [WARNING] seq gap: expected 18 got 19
+2025-08-07 02:02:58,694 [INFO] saved frames\frame_00019_20250807_020258.jpg (8712 bytes)
+2025-08-07 02:02:58,705 [INFO] hdr len=9224 seq=20
+2025-08-07 02:02:58,706 [WARNING] seq gap: expected 19 got 20
+2025-08-07 02:02:59,038 [INFO] saved frames\frame_00020_20250807_020259.jpg (9224 bytes)
+2025-08-07 02:02:59,111 [INFO] hdr len=8712 seq=21
+2025-08-07 02:02:59,112 [WARNING] seq gap: expected 20 got 21
+2025-08-07 02:02:59,378 [INFO] saved frames\frame_00021_20250807_020259.jpg (8712 bytes)
+2025-08-07 02:02:59,391 [INFO] hdr len=8712 seq=22
+2025-08-07 02:02:59,393 [WARNING] seq gap: expected 21 got 22
+2025-08-07 02:02:59,691 [INFO] saved frames\frame_00022_20250807_020259.jpg (8712 bytes)
+2025-08-07 02:02:59,707 [INFO] hdr len=8712 seq=23
+2025-08-07 02:02:59,708 [WARNING] seq gap: expected 22 got 23
+2025-08-07 02:03:00,017 [INFO] saved frames\frame_00023_20250807_020300.jpg (8712 bytes)
+2025-08-07 02:03:00,074 [INFO] hdr len=8712 seq=24
+2025-08-07 02:03:00,074 [WARNING] seq gap: expected 23 got 24
+2025-08-07 02:03:00,484 [INFO] saved frames\frame_00024_20250807_020300.jpg (8712 bytes)
+2025-08-07 02:03:00,537 [INFO] hdr len=8712 seq=25
+2025-08-07 02:03:00,538 [WARNING] seq gap: expected 24 got 25
+2025-08-07 02:03:00,899 [INFO] saved frames\frame_00025_20250807_020300.jpg (8712 bytes)
+2025-08-07 02:03:00,961 [INFO] hdr len=9224 seq=26
+2025-08-07 02:03:00,962 [WARNING] seq gap: expected 25 got 26
+2025-08-07 02:03:01,285 [INFO] saved frames\frame_00026_20250807_020301.jpg (9224 bytes)
+2025-08-07 02:03:01,330 [INFO] hdr len=9224 seq=27
+2025-08-07 02:03:01,331 [WARNING] seq gap: expected 26 got 27
+2025-08-07 02:03:02,025 [INFO] saved frames\frame_00027_20250807_020302.jpg (9224 bytes)
+2025-08-07 02:03:02,079 [INFO] hdr len=8712 seq=28
+2025-08-07 02:03:02,080 [WARNING] seq gap: expected 27 got 28
+2025-08-07 02:03:02,582 [INFO] saved frames\frame_00028_20250807_020302.jpg (8712 bytes)
+2025-08-07 02:03:02,797 [INFO] hdr len=8712 seq=29
+2025-08-07 02:03:02,798 [WARNING] seq gap: expected 28 got 29
+2025-08-07 02:03:03,004 [INFO] saved frames\frame_00029_20250807_020303.jpg (8712 bytes)
+2025-08-07 02:03:03,049 [INFO] hdr len=8712 seq=30
+2025-08-07 02:03:03,050 [WARNING] seq gap: expected 29 got 30
+2025-08-07 02:03:03,331 [INFO] saved frames\frame_00030_20250807_020303.jpg (8712 bytes)
+2025-08-07 02:03:03,406 [INFO] hdr len=8712 seq=31
+2025-08-07 02:03:03,406 [WARNING] seq gap: expected 30 got 31
+2025-08-07 02:03:03,708 [INFO] saved frames\frame_00031_20250807_020303.jpg (8712 bytes)
+2025-08-07 02:03:03,873 [INFO] hdr len=8712 seq=32
+2025-08-07 02:03:03,874 [WARNING] seq gap: expected 31 got 32
+2025-08-07 02:03:04,079 [INFO] saved frames\frame_00032_20250807_020304.jpg (8712 bytes)
+2025-08-07 02:03:04,137 [INFO] hdr len=9224 seq=33
+2025-08-07 02:03:04,138 [WARNING] seq gap: expected 32 got 33
+2025-08-07 02:03:04,745 [INFO] saved frames\frame_00033_20250807_020304.jpg (9224 bytes)
+2025-08-07 02:03:04,776 [INFO] hdr len=8712 seq=34
+2025-08-07 02:03:04,777 [WARNING] seq gap: expected 33 got 34
+2025-08-07 02:03:05,058 [INFO] saved frames\frame_00034_20250807_020305.jpg (8712 bytes)
+2025-08-07 02:03:05,084 [INFO] hdr len=8712 seq=35
+2025-08-07 02:03:05,085 [WARNING] seq gap: expected 34 got 35
+2025-08-07 02:03:05,468 [INFO] saved frames\frame_00035_20250807_020305.jpg (8712 bytes)
+2025-08-07 02:03:05,484 [INFO] hdr len=8712 seq=36
+2025-08-07 02:03:05,484 [WARNING] seq gap: expected 35 got 36
+2025-08-07 02:03:05,807 [INFO] saved frames\frame_00036_20250807_020305.jpg (8712 bytes)
+2025-08-07 02:03:06,061 [INFO] hdr len=9224 seq=37
+2025-08-07 02:03:06,063 [WARNING] seq gap: expected 36 got 37
+2025-08-07 02:03:06,311 [INFO] saved frames\frame_00037_20250807_020306.jpg (9224 bytes)
+2025-08-07 02:03:06,356 [INFO] hdr len=8712 seq=38
+2025-08-07 02:03:06,356 [WARNING] seq gap: expected 37 got 38
+2025-08-07 02:03:06,802 [INFO] saved frames\frame_00038_20250807_020306.jpg (8712 bytes)
+2025-08-07 02:03:06,901 [INFO] hdr len=8712 seq=39
+2025-08-07 02:03:06,902 [WARNING] seq gap: expected 38 got 39
+2025-08-07 02:03:07,239 [INFO] saved frames\frame_00039_20250807_020307.jpg (8712 bytes)
+2025-08-07 02:03:07,260 [INFO] hdr len=8712 seq=40
+2025-08-07 02:03:07,261 [WARNING] seq gap: expected 39 got 40
+2025-08-07 02:03:07,605 [INFO] saved frames\frame_00040_20250807_020307.jpg (8712 bytes)
+2025-08-07 02:03:07,633 [INFO] hdr len=9224 seq=41
+2025-08-07 02:03:07,634 [WARNING] seq gap: expected 40 got 41
+2025-08-07 02:03:07,947 [INFO] saved frames\frame_00041_20250807_020307.jpg (9224 bytes)
+2025-08-07 02:03:08,011 [INFO] hdr len=8712 seq=42
+2025-08-07 02:03:08,012 [WARNING] seq gap: expected 41 got 42
+2025-08-07 02:03:08,295 [INFO] saved frames\frame_00042_20250807_020308.jpg (8712 bytes)
+2025-08-07 02:03:08,317 [INFO] hdr len=8712 seq=43
+2025-08-07 02:03:08,318 [WARNING] seq gap: expected 42 got 43
+2025-08-07 02:03:08,619 [INFO] saved frames\frame_00043_20250807_020308.jpg (8712 bytes)
+2025-08-07 02:03:08,626 [INFO] hdr len=8712 seq=44
+2025-08-07 02:03:08,627 [WARNING] seq gap: expected 43 got 44
+2025-08-07 02:03:08,927 [INFO] saved frames\frame_00044_20250807_020308.jpg (8712 bytes)
+2025-08-07 02:03:08,956 [INFO] hdr len=8712 seq=45
+2025-08-07 02:03:08,957 [WARNING] seq gap: expected 44 got 45
+2025-08-07 02:03:09,241 [INFO] saved frames\frame_00045_20250807_020309.jpg (8712 bytes)
+2025-08-07 02:03:09,255 [INFO] hdr len=8712 seq=46
+2025-08-07 02:03:09,257 [WARNING] seq gap: expected 45 got 46
+2025-08-07 02:03:09,569 [INFO] saved frames\frame_00046_20250807_020309.jpg (8712 bytes)
+2025-08-07 02:03:09,626 [INFO] hdr len=8712 seq=47
+2025-08-07 02:03:09,626 [WARNING] seq gap: expected 46 got 47
+2025-08-07 02:03:09,922 [INFO] saved frames\frame_00047_20250807_020309.jpg (8712 bytes)
+2025-08-07 02:03:09,946 [INFO] hdr len=8712 seq=48
+2025-08-07 02:03:09,947 [WARNING] seq gap: expected 47 got 48
+2025-08-07 02:03:10,236 [INFO] saved frames\frame_00048_20250807_020310.jpg (8712 bytes)
+2025-08-07 02:03:10,265 [INFO] hdr len=8712 seq=49
+2025-08-07 02:03:10,267 [WARNING] seq gap: expected 48 got 49
+2025-08-07 02:03:10,552 [INFO] saved frames\frame_00049_20250807_020310.jpg (8712 bytes)
+2025-08-07 02:03:10,571 [INFO] hdr len=8712 seq=50
+2025-08-07 02:03:10,571 [WARNING] seq gap: expected 49 got 50
+2025-08-07 02:03:11,012 [INFO] saved frames\frame_00050_20250807_020311.jpg (8712 bytes)
+2025-08-07 02:03:11,042 [INFO] hdr len=8712 seq=51
+2025-08-07 02:03:11,059 [WARNING] seq gap: expected 50 got 51
+2025-08-07 02:03:11,339 [INFO] saved frames\frame_00051_20250807_020311.jpg (8712 bytes)
+2025-08-07 02:03:11,374 [INFO] hdr len=8712 seq=52
+2025-08-07 02:03:11,375 [WARNING] seq gap: expected 51 got 52
+2025-08-07 02:03:11,650 [INFO] saved frames\frame_00052_20250807_020311.jpg (8712 bytes)
+2025-08-07 02:03:11,666 [INFO] hdr len=8712 seq=53
+2025-08-07 02:03:11,667 [WARNING] seq gap: expected 52 got 53
+2025-08-07 02:03:11,969 [INFO] saved frames\frame_00053_20250807_020311.jpg (8712 bytes)
+2025-08-07 02:03:11,980 [INFO] hdr len=8712 seq=54
+2025-08-07 02:03:11,981 [WARNING] seq gap: expected 53 got 54
+2025-08-07 02:03:12,290 [INFO] saved frames\frame_00054_20250807_020312.jpg (8712 bytes)
+2025-08-07 02:03:12,429 [INFO] hdr len=8712 seq=55
+2025-08-07 02:03:12,687 [WARNING] seq gap: expected 54 got 55
+2025-08-07 02:03:12,692 [INFO] saved frames\frame_00055_20250807_020312.jpg (8712 bytes)
+2025-08-07 02:03:12,710 [INFO] hdr len=8712 seq=56
+2025-08-07 02:03:12,711 [WARNING] seq gap: expected 55 got 56
+2025-08-07 02:03:13,013 [INFO] saved frames\frame_00056_20250807_020313.jpg (8712 bytes)
+2025-08-07 02:03:13,026 [INFO] hdr len=8712 seq=57
+2025-08-07 02:03:13,026 [WARNING] seq gap: expected 56 got 57
+2025-08-07 02:03:13,233 [INFO] CTRL-C in main - exit.
+2025-08-07 02:09:04,053 [INFO] listening on 0.0.0.0:12345
+2025-08-07 02:09:32,882 [INFO] CTRL-C in main - exit.
+2025-08-07 02:09:33,648 [INFO] listening on 0.0.0.0:12345
+2025-08-07 02:11:45,090 [INFO] client ('192.168.2.111', 19048) connected
+2025-08-07 02:11:45,094 [INFO] hdr len=9224 seq=0
+2025-08-07 02:11:45,534 [ERROR] seq 0 – missing EOI, dropped
+2025-08-07 02:11:47,416 [INFO] hdr len=9224 seq=0
+2025-08-07 02:11:47,417 [WARNING] seq gap: expected 1 got 0
+2025-08-07 02:11:47,436 [INFO] hdr len=1747520660 seq=37904
+2025-08-07 02:11:47,437 [WARNING] seq gap: expected 1 got 37904
+2025-08-07 02:36:09,304 [ERROR] client ('192.168.2.111', 19048): timed out
+2025-08-07 02:36:09,335 [INFO] connection to ('192.168.2.111', 19048) closed
+2025-08-07 02:56:40,648 [INFO] CTRL-C in main - exit.

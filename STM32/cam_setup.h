@@ -1,4 +1,4 @@
-#pragma once
+
 #include "mbed.h"
 #include "ArduCAM.h"
 #include "memorysaver.h"
@@ -12,8 +12,12 @@
  * so users still see *all* valid JPEG sizes & quality options exactly
  * where they expect them.
  */
+
+
+
 inline void setup_cam(ArduCAM& cam, I2C& i2c)
 {
+    
     // ===== Supported JPEG Resolutions =====
     // OV2640_160x120     // QQVGA — lowest quality (tiny, unusable)
     // OV2640_176x144     // QCIF

@@ -12,6 +12,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <chrono>
+#include "cam_thread.hpp"
+
 using namespace std::chrono_literals;
 
 static TCPSocket  socket;
@@ -20,14 +22,35 @@ static rtos::Mutex io_mutex;     // <— protect all socket I/O
 
 // sigio callback
 static void on_socket_activity() {
-    evt.set(0x01);
+    evt.set(0x01 | 0x02);           // 0x02 = TX space available
 }
 
+
 // low-level send used by commands.cpp
-int send_packet(const void *buf, uint32_t len) {
-    // we assume caller has already locked io_mutex if needed
-    return socket.send(buf, len);
+int send_packet(const void *buf, uint32_t len)
+{
+    const uint8_t *p = static_cast<const uint8_t*>(buf);
+    uint32_t sent_total = 0;
+
+    while (sent_total < len) {
+        int ret = socket.send(p + sent_total, len - sent_total);
+
+        if (ret == NSAPI_ERROR_WOULD_BLOCK) {
+            /* Socket TX buffer full — wait for it to become writable.
+               'evt' is already tied to sigio(). 0x01 bit is RX, we'll
+               use bit 0x02 for TX-ready. */
+            evt.wait_any(0x02, /*timeout*/ 500);   // 500 ms safety
+            continue;
+        }
+        if (ret < 0)               // real error
+            return ret;
+
+        sent_total += ret;
+    }
+    return sent_total;              // all bytes queued
 }
+
+
 
 // Bring up Wi-Fi, return NSAPI_ERROR_OK or error code
 nsapi_error_t connect_to_wifi(const char *ssid, const char *pwd) {
@@ -44,6 +67,7 @@ nsapi_error_t connect_to_wifi(const char *ssid, const char *pwd) {
         return ret;
     }
     SocketAddress ip;
+    ThisThread::sleep_for(500ms);
     wifi->get_ip_address(&ip);
     printf("IP: %s\n", ip.get_ip_address());
     return NSAPI_ERROR_OK;
@@ -140,8 +164,15 @@ void start_secure_client() {
         }
     });
 
-    // Encrypted receive loop (all recv under lock)
+    // Camera thread — one call, that’s it
+    start_cam_thread(io_mutex);
+
+    // Encrypted‐receive loop starts here …
+    socket.set_blocking(false);
+    socket.sigio(callback(on_socket_activity));
     while (true) {
+
+
         evt.wait_any(0x01);
 
         // 1) Read IV + C0 under lock
@@ -197,5 +228,64 @@ void start_secure_client() {
         process_incoming_command(pkt);
 
         free(plain);
+    }
+}
+
+void start_plain_client(const uint8_t *(*get_jpeg)(uint32_t &len)) {
+    WiFiInterface *wifi = WiFiInterface::get_default_instance();
+    socket.open(wifi);
+
+    SocketAddress addr;
+    addr.set_ip_address(SERVER_IP);
+    addr.set_port(SERVER_PORT);
+
+    for (int attempt = 1; attempt <= 2; ++attempt) {
+        printf("Connecting to %s:%d (attempt %d)...\n",
+               SERVER_IP, SERVER_PORT, attempt);
+        nsapi_error_t ret = socket.connect(addr);
+        if (ret == NSAPI_ERROR_OK) {
+            printf("Connected on attempt %d.\n", attempt);
+            break;
+        }
+        printf("Connect attempt %d failed: %d\n", attempt, ret);
+        if (attempt == 2) {
+            printf("Failed to connect after 2 attempts.\n");
+            return;
+        }
+        ThisThread::sleep_for(2s);
+    }
+
+    // JPEG send loop — send [length (4 LE)] + [JPEG bytes]
+    while (true) {
+        uint32_t len = 0;
+        const uint8_t *jpeg = get_jpeg(len);  // blocking capture
+
+        if (!jpeg || len == 0 || len > 2*1024*1024) {
+            printf("Invalid JPEG capture\n");
+            continue;
+        }
+
+        // Build 4-byte header
+        uint8_t hdr[4] = {
+            (uint8_t)(len & 0xFF),
+            (uint8_t)((len >> 8) & 0xFF),
+            (uint8_t)((len >> 16) & 0xFF),
+            (uint8_t)((len >> 24) & 0xFF)
+        };
+
+        io_mutex.lock();
+        int sent = socket.send(hdr, 4);
+        if (sent == 4) {
+            sent = socket.send(jpeg, len);
+        }
+        io_mutex.unlock();
+
+        if (sent < 0) {
+            printf("Send error: %d\n", sent);
+        } else {
+            printf("Sent JPEG: %lu bytes\n", (unsigned long)len);
+        }
+
+        ThisThread::sleep_for(1s);  // ~1 fps
     }
 }
