@@ -1,0 +1,9 @@
+#ifndef MBEDTLS_USER_CONFIG_H
+#define MBEDTLS_USER_CONFIG_H
+
+#define MBEDTLS_AES_C
+#define MBEDTLS_CIPHER_C
+#define MBEDTLS_CIPHER_MODE_CBC
+#define MBEDTLS_AES_ALT
+
+#endif

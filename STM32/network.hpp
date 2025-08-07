@@ -1,24 +1,20 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
-#include "WiFiInterface.h"
 #include <cstdint>
-#include <string>
+#include "nsapi_types.h"    // for nsapi_error_t
+#include "commands.hpp"
 
-// Connects using the given credentials, returns true on success
-bool connect_to_wifi(const std::string &ssid, const std::string &password);
+// Connect to Wi-Fi; returns NSAPI_ERROR_OK on success or an NSAPI_ERROR_* on failure
+nsapi_error_t connect_to_wifi(const char *ssid, const char *pwd);
 
-// Starts a TCP socket server that listens and prints received data
-void start_tcp_server();
+// Blocking challenge/response handshake
+bool perform_handshake();
 
-// Message packet definition
-struct __attribute__((packed)) CommandPacket {
-    uint8_t  command_id;     
-    uint16_t command_arg;   
-    uint32_t data_len;       
-    uint8_t  padding_len;    // Extra padding at end of data = 7 when data len is 0 (data_len + 7) % 16
-    uint32_t timestamp;      
-    uint8_t  data[];         
-};
+// Encrypted receive loop (never returns)
+void start_secure_client();
+
+// Low-level send used by commands.cpp
+int send_packet(const void *buf, uint32_t len);
 
 #endif
