@@ -164,7 +164,7 @@ void start_secure_client() {
         }
     });
 
-    // Camera thread — one call, that’s it
+    // Camera thread - cam_thread.cpp
     start_cam_thread(io_mutex);
 
     // Encrypted‐receive loop starts here …
