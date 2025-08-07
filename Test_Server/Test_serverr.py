@@ -2,6 +2,7 @@
 import socket
 from Crypto.Cipher import AES
 import time
+import os
 
 HOST     = '0.0.0.0'
 PORT     = 12345
@@ -27,6 +28,25 @@ def recv_exact(sock, n):
             raise ConnectionError("Connection closed")
         buf += chunk
     return buf
+
+def send_get_photo(sock, key):
+    cmd_id     = 0x01                # CMD_GET_PHOTO
+    arg        = 0
+    data_len   = 0
+    pad_len    = 4                   # 12-byte header needs 4 bytes pad
+    timestamp  = 0
+
+    header  = bytearray()
+    header.append(cmd_id)
+    header += arg.to_bytes(2, 'little')
+    header += data_len.to_bytes(4, 'little')
+    header.append(pad_len)           # ← the missing byte
+    header += timestamp.to_bytes(4, 'little')   # 4 bytes
+
+    plain = bytes(header) + b'\x00' * pad_len   # 16 bytes total
+    iv    = os.urandom(16)
+    cipher = AES.new(key, AES.MODE_CBC, iv).encrypt(plain)
+    sock.sendall(iv + cipher)        # 32-byte packet on the wire
 
 def main():
     key = load_key()
@@ -78,8 +98,11 @@ def main():
                 print(f"   pad_len   = {pad_len}")
                 print(f"   timestamp = {timestamp}")
 
+                
+
                 if cmd_id == 0x03:
                     print("Alarm tripped command received!\n")
+                    send_get_photo(conn, key)    # new helper – see below
                 elif cmd_id == 0x02:          # CMD_SEND_PHOTO
                     # --- how many more encrypted bytes do we need? ---
                     plain_size  = 12 + data_len + pad_len       # entire plaintext
