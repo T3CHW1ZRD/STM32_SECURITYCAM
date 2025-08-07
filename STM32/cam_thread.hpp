@@ -5,3 +5,4 @@
 /// and streams them over the encrypted socket.
 /// Call once, passing the same mutex that guards socket I/O.
 void start_cam_thread(rtos::Mutex &net_io_mutex);
+void cam_request_photo();               // NEW – called from on_get_photo()

@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cstring>
 
+
 // Internal helper: builds a CommandPacket, sets timestamp, encrypts & sends
 static int send_command(uint8_t         id,
                         uint16_t        arg,
@@ -87,5 +88,6 @@ void process_incoming_command(const CommandPacket *pkt) {
     }
 }
 
-// Dummy handler so we link successfully
-void on_get_photo() {}
+void on_get_photo() {
+    cam_request_photo();    // ONE line
+}

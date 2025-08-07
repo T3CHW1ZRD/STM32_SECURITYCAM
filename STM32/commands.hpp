@@ -20,6 +20,7 @@ static constexpr uint8_t CMD_ALARM_TRIPPED  = 0x03;  // Device → Server
 
 // Application callback for incoming “Get Photo”
 void on_get_photo();
+void cam_request_photo();   // comes from cam_thread.hpp
 
 // Device-side senders
 int send_send_photo(const uint8_t *data, uint32_t len);
