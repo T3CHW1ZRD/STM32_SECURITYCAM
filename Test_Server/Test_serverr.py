@@ -7,6 +7,11 @@ import os
 HOST     = '0.0.0.0'
 PORT     = 12345
 KEY_FILE = 'key.txt'
+# Flags reused from MCU (CMD_SEND_PHOTO arg bits)
+PHOTO_FLAG_START = 0x0001
+PHOTO_FLAG_LAST  = 0x0002
+PHOTO_SEQ_SHIFT  = 8
+PHOTO_SEQ_MASK   = 0xFF00
 
 def load_key():
     data = open(KEY_FILE, 'rb').read().strip()
@@ -28,6 +33,39 @@ def recv_exact(sock, n):
             raise ConnectionError("Connection closed")
         buf += chunk
     return buf
+
+def recv_exact_allow_timeouts(sock, n, deadline=None):
+    buf = b''
+    while len(buf) < n:
+        if deadline and time.time() > deadline:
+            raise TimeoutError("tail read timed out")
+        try:
+            chunk = sock.recv(n - len(buf))
+            if not chunk:
+                raise ConnectionError("Connection closed")
+            buf += chunk
+        except socket.timeout:
+            continue  # keep waiting until deadline
+    return buf
+
+def abort_photo(photo_rx, reason):
+    if not photo_rx:
+        return None
+    name = getattr(photo_rx['fh'], 'name', None)
+    try:
+        photo_rx['fh'].close()
+    except Exception:
+        pass
+    if name:
+        try:
+            os.remove(name)
+            print(f"[photo] Aborted: {reason}. Deleted partial file {name}")
+        except OSError:
+            print(f"[photo] Aborted: {reason}. (couldn't delete {name})")
+    else:
+        print(f"[photo] Aborted: {reason}.")
+    return None
+
 
 def send_get_photo(sock, key):
     cmd_id     = 0x01                # CMD_GET_PHOTO
@@ -71,12 +109,22 @@ def main():
             conn.sendall(resp)
             print(f"Handshake → response: {resp.hex()}\n")
             print("Entering decrypt loop (Ctrl-C to exit)…\n")
-
+            conn.settimeout(1.0)  # 1s poll so we can enforce photo_rx deadline
             # Command loop: always read 32 bytes (IV + 1 block of ciphertext)
+            photo_rx = None  # holds current receive state or None
+
+
             while True:
                 try:
                     iv2 = recv_exact(conn, 16)
                     c0  = recv_exact(conn, 16)
+
+                except socket.timeout:
+                    # No data this second — enforce photo receive timeout if active
+                    if photo_rx and time.time() > photo_rx['deadline']:
+                        photo_rx = abort_photo(photo_rx, "session timeout waiting for next chunk")
+                    continue  # go back to top of loop
+
                 except ConnectionError:
                     print("Connection closed by STM32")
                     break
@@ -84,6 +132,7 @@ def main():
                 # Decrypt first block
                 aes2 = AES.new(key, AES.MODE_CBC, iv2)
                 p0   = aes2.decrypt(c0)
+
 
                 cmd_id    = p0[0]
                 cmd_arg   = int.from_bytes(p0[1:3], 'little')
@@ -99,33 +148,79 @@ def main():
                 print(f"   timestamp = {timestamp}")
 
                 
+                if cmd_id == 0x03:  # ALARM_TRIPPED
+                    if photo_rx:
+                        print("[photo] Busy (receiving photo); ignoring alarm")
+                    else:
+                        print("Alarm tripped command received!")
+                        send_get_photo(conn, key)
 
-                if cmd_id == 0x03:
-                    print("Alarm tripped command received!\n")
-                    send_get_photo(conn, key)    # new helper – see below
-                elif cmd_id == 0x02:          # CMD_SEND_PHOTO
+                elif cmd_id == 0x02:  # CMD_SEND_PHOTO
                     # --- how many more encrypted bytes do we need? ---
-                    plain_size  = 12 + data_len + pad_len       # entire plaintext
+                    plain_size  = 12 + data_len + pad_len
                     cipher_size = ((plain_size + 15) // 16) * 16
-                    rem_cipher  = cipher_size - 16              # we've already read the first block
+                    rem_cipher  = cipher_size - 16
 
-                    enc_rest = recv_exact(conn, rem_cipher)     # encrypted tail
+                    pkt_deadline = time.time() + 5.0  # 5s to finish this packet
+                    try:
+                        enc_rest = recv_exact_allow_timeouts(conn, rem_cipher, pkt_deadline)
+                    except TimeoutError:
+                        photo_rx = abort_photo(photo_rx, "packet tail timeout")
+                        continue
+                    except ConnectionError:
+                        print("Connection closed mid-packet")
+                        break
 
-                    # Decrypt the full message (first block + rest) in one shot
-                    aes_full = AES.new(key, AES.MODE_CBC, iv2)
+
+                    # Decrypt full packet
+                    aes_full   = AES.new(key, AES.MODE_CBC, iv2)
                     full_plain = aes_full.decrypt(c0 + enc_rest)
+                    payload    = full_plain[12 : 12 + data_len]  # skip 12B header
 
-                    jpeg = full_plain[12 : 12 + data_len]       # skip 12-byte header, strip pad
+                    # Chunk header fields encoded in cmd_arg/timestamp
+                    flags = cmd_arg & 0x00FF
+                    seq   = (cmd_arg & PHOTO_SEQ_MASK) >> PHOTO_SEQ_SHIFT
+                    sid   = timestamp
 
-                    # Sanity-check JPEG signature
-                    print(f"[cam] JPEG starts: {jpeg[:2].hex(' ')}")
+                    if flags & PHOTO_FLAG_START:
+                        total_len = int.from_bytes(payload[:4], 'little')
+                        jpeg_part = payload[4:]
+                        print(f"[photo] START sid={sid} total={total_len} seq={seq} len={len(jpeg_part)}")
+                        if photo_rx:
+                            photo_rx = abort_photo(photo_rx, "new START arrived while busy")
 
-                    # Save to disk
-                    fname = f"photo_{timestamp}.jpg"
-                    with open(fname, "wb") as f:
-                        f.write(jpeg)
+                        photo_rx = {
+                            'sid': sid, 'total': total_len,
+                            'bytes': 0, 'expect_seq': 1,
+                            'fh': open(f"photo_{sid}.jpg", "wb"),
+                            'deadline': time.time() + 5.0
+                        }
+                        photo_rx['fh'].write(jpeg_part)
+                        photo_rx['bytes'] += len(jpeg_part)
+                        if (flags & PHOTO_FLAG_LAST) or photo_rx['bytes'] >= total_len:
+                            photo_rx['fh'].close()
+                            print(f"[+] Completed {photo_rx['bytes']} bytes -> photo_{sid}.jpg")
+                            photo_rx = None
 
-                    print(f"[+] Saved {data_len} bytes -> {fname}\n")
+                    elif photo_rx and sid == photo_rx['sid']:
+                        if seq != photo_rx['expect_seq']:
+                            print(f"[photo] Sequence mismatch (got {seq}, want {photo_rx['expect_seq']})")
+                            photo_rx = abort_photo(photo_rx, "sequence mismatch")
+                            continue
+                        print(f"[photo] CHUNK sid={sid} seq={seq} len={len(payload)}")
+                        photo_rx['fh'].write(payload)
+                        photo_rx['bytes'] += len(payload)
+                        photo_rx['expect_seq'] += 1
+                        photo_rx['deadline'] = time.time() + 5.0
+                        if (flags & PHOTO_FLAG_LAST) or photo_rx['bytes'] >= photo_rx['total']:
+                            photo_rx['fh'].close()
+                            print(f"[+] Completed {photo_rx['bytes']} bytes -> photo_{sid}.jpg")
+                            photo_rx = None
+
+                    else:
+                        print("[photo] Chunk for unknown or expired session — ignoring")
+
+
 
 
     print("Server exiting.")

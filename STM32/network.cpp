@@ -156,13 +156,15 @@ void start_secure_client() {
     socket.set_blocking(false);
     socket.sigio(callback(on_socket_activity));
 
+
     // BT EVENTS
     static events::EventQueue ble_q(32 * EVENTS_EVENT_SIZE);
-    static rtos::Thread       ble_thread(osPriorityNormal);
+    static rtos::Thread       ble_thread(osPriorityNormal, 4096); // give BLE a tad more stack
     static BluetoothAlert     bt(ble_q);
-    
-    bt.init();
+
     ble_thread.start(callback(&ble_q, &events::EventQueue::dispatch_forever));
+    ThisThread::sleep_for(50ms); // let the queue thread spin up
+    bt.init();
 
     // Camera thread - cam_thread.cpp
     start_cam_thread(io_mutex);

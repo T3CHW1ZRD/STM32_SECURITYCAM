@@ -27,17 +27,20 @@ void BluetoothAlert::on_init_complete(BLE::InitializationCompleteCallbackContext
         return;
     }
 
-    // GAP event handler (connect/disconnect)
-    _ble.gap().setEventHandler(&_gap_handler);
+    // Do all GAP/GATT setup on the BLE EventQueue thread to avoid cross-thread issues.
+    _q.call([this]{
+        // GAP event handler (connect/disconnect)
+        _ble.gap().setEventHandler(&_gap_handler);
 
-    // Add GATT server objects (service + characteristic)
-    add_gatt_server();
+        // Add GATT server objects (service + characteristic)
+        add_gatt_server();
 
-    // Start advertising (connectable)
-    start_advertising_connectable();
+        // Start advertising (connectable)
+        start_advertising_connectable();
 
-    _ready = true;
-    printf("BLE ready: advertising and GATT set up\n");
+        _ready = true;
+        printf("BLE ready: advertising and GATT set up (name='%s')\n", BLE_NAME);
+    });
 }
 
 // ---- GAP events ----
@@ -112,76 +115,85 @@ void BluetoothAlert::start_advertising_connectable() {
 }
 
 void BluetoothAlert::set_adv_payload_idle() {
-    // ADV payload: flags + local service list (FFF0)
+    // ADV payload: flags + NAME + service UUID (so scanners see name without active scan)
     _adv_builder.clear();
     _adv_builder.setFlags(
         ble::adv_data_flags_t::LE_GENERAL_DISCOVERABLE |
         ble::adv_data_flags_t::BREDR_NOT_SUPPORTED
     );
 
+    _adv_builder.setName(BLE_NAME); // <-- put name in ADV payload
+
+    // advertise your service UUID too
     if (auto e = _adv_builder.setLocalServiceList(mbed::make_Span(&_svc_uuid, 1), /*complete*/ true)) {
         printf("setLocalServiceList err=%d\r\n", e);
     }
 
-    _ble.gap().setAdvertisingPayload(
+    auto e1 = _ble.gap().setAdvertisingPayload(
         ble::LEGACY_ADVERTISING_HANDLE,
         _adv_builder.getAdvertisingData()
     );
+    if (e1) printf("setAdvertisingPayload err=%d\r\n", e1);
 
-    // SCAN response: name
+    // keep scan response too (optional)
     ble::AdvertisingDataBuilder scan_rsp(_scan_resp_buf);
     scan_rsp.clear();
-    scan_rsp.setName(BLE_NAME);
-    _ble.gap().setAdvertisingScanResponse(
+    scan_rsp.setName(BLE_NAME); // same name
+    auto e2 = _ble.gap().setAdvertisingScanResponse(
         ble::LEGACY_ADVERTISING_HANDLE,
         scan_rsp.getAdvertisingData()
     );
+    if (e2) printf("setAdvertisingScanResponse err=%d\r\n", e2);
 }
-
 void BluetoothAlert::set_alert_state_adv(bool alert) {
-    // Keep a manufacturer byte mirroring alert state (00/01)
+    // ADV payload: flags + NAME + service UUID + a small manufacturer byte (alert 0/1)
     _adv_builder.clear();
     _adv_builder.setFlags(
         ble::adv_data_flags_t::LE_GENERAL_DISCOVERABLE |
         ble::adv_data_flags_t::BREDR_NOT_SUPPORTED
     );
 
-    // Service UUID in payload even when toggling manufacturer data
+    _adv_builder.setName(BLE_NAME); // keep name visible during alert state
+
     (void)_adv_builder.setLocalServiceList(mbed::make_Span(&_svc_uuid, 1), true);
 
     const uint8_t mfg[] = { 0xFF, 0xFF, static_cast<uint8_t>(alert ? 1 : 0) };
     _adv_builder.setManufacturerSpecificData(mbed::Span<const uint8_t>(mfg, sizeof(mfg)));
 
-    _ble.gap().setAdvertisingPayload(
+    auto e1 = _ble.gap().setAdvertisingPayload(
         ble::LEGACY_ADVERTISING_HANDLE,
         _adv_builder.getAdvertisingData()
     );
+    if (e1) printf("setAdvertisingPayload err=%d\r\n", e1);
 
-    // Scan response
+    // scan response (optional)
     ble::AdvertisingDataBuilder scan_rsp(_scan_resp_buf);
     scan_rsp.clear();
-    scan_rsp.setName("SECCAM");
-    _ble.gap().setAdvertisingScanResponse(
+    scan_rsp.setName(BLE_NAME);
+    auto e2 = _ble.gap().setAdvertisingScanResponse(
         ble::LEGACY_ADVERTISING_HANDLE,
         scan_rsp.getAdvertisingData()
     );
+    if (e2) printf("setAdvertisingScanResponse err=%d\r\n", e2);
 }
+
 
 // ---- Alert lifecycle ----
 void BluetoothAlert::trigger_alert() {
     if (_busy || !_ready) return;
     _busy = true;
 
-    // Update ADV (optional) and notify subscribers
-    set_alert_state_adv(true);
-    notify_alert(0x01);
+    _q.call([this]{
+        set_alert_state_adv(true);
+        notify_alert(0x01);
+    });
 
-    // Auto clear in 3s on EventQueue
-    _q.call_in(3s, callback(this, &BluetoothAlert::clear_alert));
+    _q.call_in(3s, [this]{ clear_alert(); });
 }
-
 void BluetoothAlert::clear_alert() {
     _busy = false;
-    set_alert_state_adv(false);
-    notify_alert(0x00);
+    _q.call([this]{
+        set_alert_state_adv(false);
+        notify_alert(0x00);
+    });
 }

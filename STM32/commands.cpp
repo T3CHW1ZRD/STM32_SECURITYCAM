@@ -98,6 +98,36 @@ int send_send_photo(const uint8_t *data, uint32_t len) {
 int send_alarm_tripped(void) {
     return send_command(CMD_ALARM_TRIPPED, 0, /*ts=*/0, nullptr, 0);
 }
+// New chunked-photo send helpers — reuse CMD_SEND_PHOTO
+int send_photo_start(uint32_t session_id, uint32_t total_len,
+                     const uint8_t* first_bytes, uint32_t n_first_bytes,
+                     bool single_chunk)
+{
+    // Build payload: [total_len (4 bytes LE)] + first JPEG bytes
+    const uint32_t L = 4 + n_first_bytes;
+    uint8_t *buf = new uint8_t[L];
+    buf[0] = static_cast<uint8_t>( total_len        & 0xFF);
+    buf[1] = static_cast<uint8_t>((total_len >> 8)  & 0xFF);
+    buf[2] = static_cast<uint8_t>((total_len >> 16) & 0xFF);
+    buf[3] = static_cast<uint8_t>((total_len >> 24) & 0xFF);
+
+    if (n_first_bytes && first_bytes) {
+        memcpy(buf + 4, first_bytes, n_first_bytes);
+    }
+
+    uint16_t arg = PHOTO_FLAG_START | (single_chunk ? PHOTO_FLAG_LAST : 0);
+    int ret = send_command(CMD_SEND_PHOTO, arg, session_id, buf, L);
+    delete[] buf;
+    return ret;
+}
+
+int send_photo_chunk(uint32_t session_id, uint16_t seq,
+                     const uint8_t* bytes, uint32_t n_bytes, bool is_last)
+{
+    uint16_t arg = ((seq & 0xFF) << PHOTO_SEQ_SHIFT) |
+                   (is_last ? PHOTO_FLAG_LAST : 0);
+    return send_command(CMD_SEND_PHOTO, arg, session_id, bytes, n_bytes);
+}
 
 // Dispatcher — call on_get_photo() when we see that command
 void process_incoming_command(const CommandPacket *pkt) {
