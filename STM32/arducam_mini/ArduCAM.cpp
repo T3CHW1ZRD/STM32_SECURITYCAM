@@ -145,3 +145,12 @@ void ArduCAM::init_camera(I2C& i2c) {
     wrSensorReg8_8(i2c, 0x15, 0x00);
 }
 
+void ArduCAM::clear_fifo_flag(void )
+{
+	write_reg(ARDUCHIP_FIFO, FIFO_CLEAR_MASK);
+}
+
+// Clear the sticky CAP_DONE bit (W1C) in ARDUCHIP_TRIG
+void ArduCAM::clear_capture_done() {
+    write_reg(ARDUCHIP_TRIG, CAP_DONE_MASK);
+}

@@ -33,11 +33,11 @@ inline void setup_cam(ArduCAM& cam, I2C& i2c)
     // Lower hex = less compression = better image = bigger file
     // 0x36 → low | 0x2A → medium | 0x24 → good | 0x20 → high | 0x1C → very high
     // (block copied verbatim from previous main.cpp) :contentReference[oaicite:3]{index=3}
-
+    
     cam.set_format(JPEG, i2c);
     cam.OV2640_set_JPEG_size(i2c, CAM_JPEG_SIZE);
     cam.set_jpeg_quality(i2c,     CAM_JPEG_QUALITY);
 
     cam.flush_fifo();
-    cam.start_capture();
+    //cam.start_capture();
 }

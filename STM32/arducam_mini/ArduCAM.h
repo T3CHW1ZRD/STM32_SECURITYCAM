@@ -110,6 +110,8 @@
 #define ARDUCHIP_FIFO       0x04
 #define ARDUCHIP_TRIG       0x41
 #define ARDUCHIP_FRAMES     0x01
+#define ARDUCHIP_FIFO      	0x04  //FIFO and I2C control
+
 
 #define FIFO_CLEAR_MASK     0x01
 #define FIFO_START_MASK     0x02
@@ -128,7 +130,8 @@
 #define FIFO_SIZE2     0x43
 #define FIFO_SIZE3     0x44
 #define OV2640_I2C_ADDR 0x30  // 7-bit I2C address of OV2640 = 0x60 write / 0x61 read
-#define JPEG 0x01             // JPEG format enum/constant (used in `set_format`)
+#define JPEG 0x01   
+#define CAP_DONE_MASK  0x08          // JPEG format enum/constant (used in `set_format`)
 
 enum OV2640_Size : uint8_t {
   OV2640_160x120,
@@ -185,6 +188,10 @@ public:
 
     // Add more high-level methods here later if needed
     void set_jpeg_quality(I2C& i2c, uint8_t quality);
+
+    void clear_fifo_flag();
+    void clear_capture_done();
+
 
 private:
     model m_model;
