@@ -22,11 +22,15 @@ using namespace std::chrono_literals;
 static TCPSocket  socket;
 static EventFlags evt;
 static rtos::Mutex io_mutex;     // <— protect all socket I/O
+void socket_io_lock()   { io_mutex.lock(); }
+void socket_io_unlock() { io_mutex.unlock(); }
+
 
 // sigio callback
 static void on_socket_activity() {
     evt.set(0x01 | 0x02);           // 0x02 = TX space available
 }
+
 
 
 // low-level send used by commands.cpp

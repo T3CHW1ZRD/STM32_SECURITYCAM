@@ -17,4 +17,6 @@ void start_secure_client();
 // Low-level send used by commands.cpp
 int send_packet(const void *buf, uint32_t len);
 
+void socket_io_lock();
+void socket_io_unlock();
 #endif

@@ -57,15 +57,20 @@ static int send_command(uint8_t         id,
     }
 
     // Encrypt: generate IV and do AES-192-CBC over the entire buffer
+    // Encrypt: generate IV and do AES-192-CBC over the entire buffer
     uint8_t iv[16];
     fill_random(iv, sizeof(iv));
     aes_cbc_encrypt(key, sizeof(key), iv, plain, cipher, total);
 
-    // Send IV || ciphertext
+    // *** Lock the socket for the whole message (IV + ciphertext) ***
+    socket_io_lock();
+
     int sent = send_packet(iv, sizeof(iv));
     if (sent > 0) {
         sent = send_packet(cipher, total);
     }
+
+    socket_io_unlock();
 
     free(plain);
     free(cipher);

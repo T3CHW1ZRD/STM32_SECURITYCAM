@@ -103,6 +103,9 @@ def main():
                 if cmd_id == 0x03:
                     print("Alarm tripped command received!\n")
                     send_get_photo(conn, key)    # new helper – see below
+                    time.sleep(1)
+                    print("GETTING CURRENT IMAGE: \n")
+                    send_get_photo(conn, key)    # new helper – see below
                 elif cmd_id == 0x02:          # CMD_SEND_PHOTO
                     # --- how many more encrypted bytes do we need? ---
                     plain_size  = 12 + data_len + pad_len       # entire plaintext
