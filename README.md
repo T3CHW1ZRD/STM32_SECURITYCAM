@@ -65,9 +65,19 @@ CN1 -> 9,10
 
 ## START PYTHON SERVER
 
-- python /test_server/test_serverr.py
+```
+cd test_server
 
-## BUILD, UPLOAD, FLASH
+pip install pycryptodome
+
+python test_serverr.py
+```
+
+- Now you should see the port its listening on (default is 12345)
+
+## BUILD, UPLOAD, FLASH STM32 folder in MBED Studio
+
+- Open serial monitor and wait for Wifi SSID prompt
 
 - Enter Wifi SSID and Password (Might fail to connect, enter again when reprompted)
 
