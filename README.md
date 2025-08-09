@@ -29,6 +29,10 @@ CN2 -> 4 (3.3v)
 CN1 -> 9,10
 ```
 
+(WARNING!!)
+
+Connnecting the wrong pins can fry the camera
+
 ## Running instructions:
 
 ### IF JPEGS ARENT LOADING CORRECTLY, FLASH ADRUINO ONTO BOARD TO SETUP CAMERA
