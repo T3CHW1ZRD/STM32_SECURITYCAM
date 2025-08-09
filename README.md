@@ -29,11 +29,13 @@ CN2 -> 4 (3.3v)
 CN1 -> 9,10
 ```
 
-(WARNING!!)
+### (WARNING!!)
 
-Connnecting the wrong pins can fry the camera
+Connnecting the wrong pins can fry the camera, so ensure theyre connected correctly before providing the board with power
 
 ## Running instructions:
+
+- Connect the board via microUSB to pc
 
 ### IF JPEGS ARENT LOADING CORRECTLY, FLASH ADRUINO ONTO BOARD TO SETUP CAMERA
 
@@ -51,7 +53,7 @@ Connnecting the wrong pins can fry the camera
 
 - To ensure JPEGS are formatted correctly, capture.py can be run to retrieve a sample JPEG
 
-### SETUP CONFIG:
+## SETUP CONFIG:
 
 ### CONFIG FILE: /STM32/proj_config.h
 
@@ -65,7 +67,7 @@ Connnecting the wrong pins can fry the camera
 
 - python /test_server/test_serverr.py
 
-### BUILD, UPLOAD, FLASH
+## BUILD, UPLOAD, FLASH
 
 - Enter Wifi SSID and Password (Might fail to connect, enter again when reprompted)
 
@@ -79,13 +81,15 @@ Connnecting the wrong pins can fry the camera
 
 - BLE scanner should display a 1 on read for 3s, then a 0
 
-### Board sends Alarm Tripped packet to server
+### COMMAND FLOW
 
-### Server responds with get photo
+- Board sends Alarm Tripped packet to server
 
-### Board sends the photo in multiple packets
+- Server responds with get photo
 
-### Server saves photo
+- Board sends the photo in multiple packets
 
-### Check server logs for the name of the image saved
+- Server saves photo
+
+- Check server logs for the name of the image saved
 
