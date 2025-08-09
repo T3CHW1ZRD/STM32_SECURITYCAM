@@ -1,8 +1,7 @@
-// File: main.cpp
 #include "mbed.h"
 #include "network.hpp"
 #include "commands.hpp"
-#include "proj_config.h"
+#include "config.hpp"
 #include <chrono>
 #include <ctime>
 
@@ -26,7 +25,7 @@ static void idle_sleep_hook() {
 }
 
 int main() {
-    printf("\nSecure TCP Client (AES-192)\n");
+    printf("\nSecure TCP Client (AES-192) — deep sleep enabled\n");
 
     // Attach idle hook so the MCU sleeps whenever idle
     rtos::Kernel::attach_idle_hook(idle_sleep_hook);
