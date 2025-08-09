@@ -68,11 +68,13 @@ CN1 -> 9,10
 
 - BLE scanner should display a 1 on read for 3s, then a 0
 
-### Server sends Alarm Tripped packet to server
+### Board sends Alarm Tripped packet to server
 
 ### Server responds with get photo
 
-### Server sends photo
+### Board sends the photo in multiple packets
+
+### Server saves photo
 
 ### Check server logs for the name of the image saved
 
