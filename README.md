@@ -4,11 +4,15 @@
 
 ### Board: DISCO-L475VG-IOT01A (B-L475E-IOT01A)
 
-### Camera: OV2640-2MP-PLUS
+### Camera: Arducam mini OV2640 2MP-PLUS
 
 ## HARDWARE SETUP:
 
 Connect wires to camera.
+
+### (WARNING!!)
+
+Connnecting the wrong pins can fry the camera, so ensure theyre connected correctly before providing the board with power
 
 ![image](https://github.com/user-attachments/assets/e14d817f-6ff9-409d-9e68-f640c0abd48c)
 
@@ -28,10 +32,6 @@ CN2 -> 4 (3.3v)
 
 CN1 -> 9,10
 ```
-
-### (WARNING!!)
-
-Connnecting the wrong pins can fry the camera, so ensure theyre connected correctly before providing the board with power
 
 ## Running instructions:
 
