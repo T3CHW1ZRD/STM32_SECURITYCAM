@@ -10,6 +10,13 @@
 
 Connect wires to camera.
 
+![image](https://github.com/user-attachments/assets/e14d817f-6ff9-409d-9e68-f640c0abd48c)
+
+![image](https://github.com/user-attachments/assets/61a68b5f-1277-47cc-9d95-98c7a411f128)
+
+![image](https://github.com/user-attachments/assets/f70a7f98-9dce-463e-9685-412532109f96)
+
+
 From left to right face the camera up and the pins towards you. 
 
 starting from CS, connect each wire to the mapping shown below
