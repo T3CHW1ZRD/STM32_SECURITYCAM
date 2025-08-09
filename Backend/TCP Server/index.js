@@ -20,7 +20,6 @@ function encryptChallengePacket(iv, decrypted){
     return encrypted;
 }
 function sendChallengeResponse(socket, payload) {
-    
     socket.write(payload);
 }
 
