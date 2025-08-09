@@ -1,7 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+<<<<<<< HEAD
 
+=======
+/* ── Network (server) ─────────────────────────────────────── */
+>>>>>>> wifi_saved
 static const char* SERVER_IP   = "172.20.10.3";
 static int         SERVER_PORT = 5001;
 
