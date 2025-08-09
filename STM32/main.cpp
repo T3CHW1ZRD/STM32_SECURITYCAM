@@ -1,12 +1,14 @@
+// File: main.cpp
 #include "mbed.h"
 #include "network.hpp"
 #include "commands.hpp"
+#include "proj_config.h"
 #include <chrono>
 #include <ctime>
 
-#include "rtos/Kernel.h"
-#include "mbed_power_mgmt.h"
-#include "hal/sleep_api.h"
+#include "rtos/Kernel.h"        // rtos::Kernel::attach_idle_hook
+#include "mbed_power_mgmt.h"    // sleep_manager_can_deep_sleep()
+#include "hal/sleep_api.h"      // hal_sleep(), hal_deepsleep()
 
 using namespace std::chrono_literals;
 
@@ -23,43 +25,21 @@ static void idle_sleep_hook() {
 #endif
 }
 
-// Minimal interactive prompt (no saving)
-static void prompt_wifi(char ssid_out[64], char pass_out[64]) {
-    auto read_line = [&](const char *label, char *buf, size_t cap) {
-        printf("%s", label);
-        fflush(stdout);
-        size_t i = 0;
-        while (true) {
-            int c = getchar();
-            if (c == '\r' || c == '\n' || c == EOF) break;
-            if ((c == '\b' || c == 127) && i > 0) { i--; printf("\b \b"); continue; }
-            if (c >= 32 && c < 127 && i + 1 < cap) { buf[i++] = (char)c; putchar(c); }
-        }
-        buf[i] = '\0';
-        printf("\n");
-    };
-
-    read_line("Enter SSID: ", ssid_out, 64);
-    read_line("Enter Password: ", pass_out, 64);
-}
-
 int main() {
-    printf("\nSecure TCP Client (AES-192)\n");
+    printf("\nSecure TCP Client (AES-192) — deep sleep enabled\n");
 
-    // Attach idle hook (portable for Mbed OS 6)
+    // Attach idle hook so the MCU sleeps whenever idle
     rtos::Kernel::attach_idle_hook(idle_sleep_hook);
 
     // Seed rand() used for IVs/backoff (non-crypto)
     srand((unsigned)time(NULL));
 
-    char ssid[64] = {0}, pass[64] = {0};
-    prompt_wifi(ssid, pass);
-
+    // Robust Wi-Fi connect (network.cpp already retries internally)
     while (true) {
-        nsapi_error_t ret = connect_to_wifi(ssid, pass);
+        nsapi_error_t ret = connect_to_wifi(WIFI_SSID, WIFI_PASSWORD);
         if (ret == NSAPI_ERROR_OK) break;
-        printf("Wi-Fi not connected (%d). Try again.\n", ret);
-        prompt_wifi(ssid, pass);
+        printf("Wi-Fi not connected (%d). Retrying...\n", ret);
+        rtos::ThisThread::sleep_for(1s);
     }
 
     start_secure_client(); // blocking
