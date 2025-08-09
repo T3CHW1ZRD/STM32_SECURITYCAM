@@ -22,6 +22,10 @@ function decryptPacket(iv, encrypted) {
   return Buffer.concat([decipher.update(encrypted), decipher.final()]);
 }
 
+function encryptPacket(iv, decrypted){
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    return Buffer.concat([cipher.update(encrypted), decipher.final()]);
+}
 function sendChallengeResponse(socket, payload) {
   socket.write(payload);
 }
@@ -38,7 +42,7 @@ async function deviceRegistration(clientIp){
 }
 
 async function forwardImage(imgBuffer, timestamp, clientIp) {
-  // also save 
+  // also save for testing
   const filename = `img_${Date.now()}.jpg`;
   try {
     fs.writeFileSync(filename, imgBuffer);
@@ -88,117 +92,134 @@ function refreshDeadline(photo, onTimeout){
 const server = net.createServer((socket) => {
   console.log('Connection established from', socket.remoteAddress);
   const deviceIp = socket.remoteAddress;
-
+  let verified = false;
   let photo = null;
+  let rx = Buffer.alloc(0);
 
   socket.on('data', async (buffer) => {
-    if (buffer.length < 32) {
+    rx = Buffer.concat([rx, buffer]);
+    if (rx.length < 32) {
       console.warn('Buffer size short');
       return;
     }
+    while(buffer.length >= 32){
 
-    const iv   = buffer.subarray(0, 16);
-    const data = buffer.subarray(16);
-
-    let decrypted;
-    try {
-      decrypted = decryptPacket(iv, data);
-    } catch (e) {
-      console.error('Decrypt failed:', e.message);
-      return;
-    }
-
-    const packet = new Packet(decrypted);
-
-    if (packet.command_id === 0x00) {
-      sendChallengeResponse(socket, packet.payload);
-      await deviceRegistration(deviceIp);
-      return;
-    }
-
-    if (packet.command_id === 0x02) {
-      const flags = packet.command_arg & 0x00FF;
-      const seq   = (packet.command_arg & P_SEQ_MASK) >> P_SEQ_SHIFT;
-      const sid   = packet.timestamp;
-
-      const onTimeout = () => {
-        photo = abortPhoto(photo, 'chunk timeout');
-      };
-
-      if (flags & P_FLAG_START) {
-        if (packet.data_len < 4) {
-          console.warn('[photo] START with too-small payload');
-          return;
+        if(!verified){
+            const iv = buffer.subarray(0, 16);
+            const val = buffer.subarray(16, 32);
+            const payload = encryptPacket(iv, val);
+            sendChallengeResponse(socket, payload);
+            verified = true;
+            rx = rx.subarray(32);
         }
 
-        const totalLen = packet.payload.readUInt32LE(0);
-        if (totalLen > MAX_IMAGE_BYTES) {
-          console.warn('[photo] totalLen exceeds cap, aborting');
-          return;
+        const iv   = buffer.subarray(0, 16);
+        const data = buffer.subarray(16);
+
+        let decrypted;
+        try {
+        decrypted = decryptPacket(iv, data);
+        } catch (e) {
+        console.error('Decrypt failed:', e.message);
+        return;
+        }
+        const packet = new Packet(decrypted);
+        const size = 16 + packet.data_len + data.padding_len;
+        const cipher_size = Math.ceil(size / 16) * 16;   // bytes after IV
+        const total_need  = 16  + cipher_size ;
+        if(rx.length < total_need) break;
+
+        if (packet.command_id === 0x00) {
+        sendChallengeResponse(socket, packet.payload);
+        await deviceRegistration(deviceIp);
+        return;
         }
 
-        const jpegPart = packet.payload.subarray(4);
-        console.log(`[photo] START sid=${sid} total=${totalLen} seq=${seq} len=${jpegPart.length}`);
+        if (packet.command_id === 0x02) {
+            await deviceRegistration(deviceIp);
+        const flags = packet.command_arg & 0x00FF;
+        const seq   = (packet.command_arg & P_SEQ_MASK) >> P_SEQ_SHIFT;
+        const sid   = packet.timestamp;
 
-        // abort any previous session
-        if (photo) photo = abortPhoto(photo, 'new START while busy');
-
-        const filename = `photo_${sid}.jpg`;
-        const fh = fs.createWriteStream(filename, { flags: 'w' });
-
-        photo = {
-          sid,
-          total: totalLen,
-          bytes: 0,
-          exSeq: 1,                 
-          fh,
-          filename,
-          timestamp: packet.timestamp,
-          timer: null,
-          imgBuffer: [],             
+        const onTimeout = () => {
+            photo = abortPhoto(photo, 'chunk timeout');
         };
 
-        // write first part
-        fh.write(jpegPart);
-        photo.imgBuffer.push(Buffer.from(jpegPart));
-        photo.bytes += jpegPart.length;
+        if (flags & P_FLAG_START) {
+            if (packet.data_len < 4) {
+            console.warn('[photo] START with too-small payload');
+            return;
+            }
+
+            const totalLen = packet.payload.readUInt32LE(0);
+            if (totalLen > MAX_IMAGE_BYTES) {
+            console.warn('[photo] totalLen exceeds cap, aborting');
+            return;
+            }
+
+            const jpegPart = packet.payload.subarray(4);
+            console.log(`[photo] START sid=${sid} total=${totalLen} seq=${seq} len=${jpegPart.length}`);
+
+            // abort any previous session
+            if (photo) photo = abortPhoto(photo, 'new START while busy');
+
+            const filename = `photo_${sid}.jpg`;
+            const fh = fs.createWriteStream(filename, { flags: 'w' });
+
+            photo = {
+            sid,
+            total: totalLen,
+            bytes: 0,
+            exSeq: 1,                 
+            fh,
+            filename,
+            timestamp: packet.timestamp,
+            timer: null,
+            imgBuffer: [],             
+            };
+
+            // write first part
+            fh.write(jpegPart);
+            photo.imgBuffer.push(Buffer.from(jpegPart));
+            photo.bytes += jpegPart.length;
+
+            refreshDeadline(photo, onTimeout);
+
+            if ((flags & P_FLAG_LAST) || photo.bytes >= photo.total) {
+            photo = await completePhoto(photo, deviceIp);
+            }
+            return;
+        }
+
+        
+        if (!photo || sid !== photo.sid) {
+            console.warn('[photo] CHUNK for unknown/expired session — ignoring');
+            return;
+        }
+
+        // sequence check
+        if (seq !== photo.exSeq) {
+            console.error(`[photo] Sequence mismatch (got ${seq}, want ${photo.exSeq})`);
+            photo = abortPhoto(photo, 'sequence mismatch');
+            return;
+        }
+
+        // append chunk
+        photo.fh.write(packet.payload);
+        photo.imgBuffer.push(Buffer.from(packet.payload));
+        photo.bytes += packet.payload.length;
+        photo.exSeq += 1;
 
         refreshDeadline(photo, onTimeout);
 
         if ((flags & P_FLAG_LAST) || photo.bytes >= photo.total) {
-          photo = await completePhoto(photo, deviceIp);
+            photo = await completePhoto(photo, deviceIp);
         }
         return;
-      }
-
-      
-      if (!photo || sid !== photo.sid) {
-        console.warn('[photo] CHUNK for unknown/expired session — ignoring');
-        return;
-      }
-
-      // sequence check
-      if (seq !== photo.exSeq) {
-        console.error(`[photo] Sequence mismatch (got ${seq}, want ${photo.exSeq})`);
-        photo = abortPhoto(photo, 'sequence mismatch');
-        return;
-      }
-
-      // append chunk
-      photo.fh.write(packet.payload);
-      photo.imgBuffer.push(Buffer.from(packet.payload));
-      photo.bytes += packet.payload.length;
-      photo.exSeq += 1;
-
-      refreshDeadline(photo, onTimeout);
-
-      if ((flags & P_FLAG_LAST) || photo.bytes >= photo.total) {
-        photo = await completePhoto(photo, deviceIp);
-      }
-      return;
-    }
-
+        }
     console.log('Invalid command received from device:', packet.command_id);
+    }
+    rx = rx.subarray(32);
   });
 
   socket.on('end', () => {
@@ -211,6 +232,7 @@ const server = net.createServer((socket) => {
     if (photo) photo = abortPhoto(photo, 'socket error');
   });
 });
+
 
 const PORT = 5001;
 server.listen(PORT, () => {
