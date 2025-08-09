@@ -2,12 +2,12 @@
 #define CONFIG_H
 
 /* ── Network (server) ─────────────────────────────────────── */
-static const char* SERVER_IP   = "192.168.0.29";
-static int         SERVER_PORT = 12345;
+static const char* SERVER_IP   = "192.168.0.10";
+static int         SERVER_PORT = 5001;
 
 /* ── Wi-Fi (client) ───────────────────────────────────────── */
-static const char* WIFI_SSID     = "Hotspot";
-static const char* WIFI_PASSWORD = "hotspot1";
+static const char* WIFI_SSID     = "FREEWIFI";
+static const char* WIFI_PASSWORD = "11112222";
 
 /* Set to 1 to use static IP, 0 for DHCP */
 #define WIFI_USE_STATIC_IP 0

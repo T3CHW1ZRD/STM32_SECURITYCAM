@@ -26,7 +26,7 @@ static void idle_sleep_hook() {
 }
 
 int main() {
-    printf("\nSecure TCP Client (AES-192) — deep sleep enabled\n");
+    printf("\nSecure TCP Client (AES-192)\n");
 
     // Attach idle hook so the MCU sleeps whenever idle
     rtos::Kernel::attach_idle_hook(idle_sleep_hook);
