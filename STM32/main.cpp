@@ -1,7 +1,7 @@
 #include "mbed.h"
 #include "network.hpp"
 #include "commands.hpp"
-#include "config.hpp"
+#include "proj_config.h"
 #include <chrono>
 #include <ctime>
 
