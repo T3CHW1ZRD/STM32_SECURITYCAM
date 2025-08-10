@@ -4,6 +4,8 @@
 #include <atomic>
 #include "events/EventQueue.h"      // ← add this
 #include "bluetooth_alert.hpp"      // ← and this
+#include <chrono>
+using namespace std::chrono;
 
 // ---- Pins (from your old main) ----
 static I2C    tof_i2c(PB_11, PB_10);
@@ -26,33 +28,40 @@ struct ToFParams {
 static void tof_worker(void* arg) {
     ToFParams p = *static_cast<ToFParams*>(arg);
     delete static_cast<ToFParams*>(arg);  // free heap param
+    const uint32_t RELAX_SENSOR = 5000;
+    uint32_t lastTrig = 0;
 
     bool triggered = false;
 
     while (true) {
         int distance = tof.getRangeMillimeters();
-
+        //printf("dist = %d\n", distance);
         if (distance > p.min_noise &&
             distance < static_cast<int>(p.trigger_range_mm) &&
             !triggered)
         {
-            printf("[ToF] Motion detected (dist=%d)\n", distance);
+            uint32_t now = duration_cast<milliseconds>(rtos::Kernel::Clock::now().time_since_epoch()).count();
+            if(now - lastTrig >= RELAX_SENSOR)
+            {
+                printf("[ToF] Motion detected (dist=%d)\n", distance);
 
-            int rc = send_alarm_tripped();
-            if (rc < 0) printf("[ToF] send_alarm_tripped err=%d\n", rc);
+                int rc = send_alarm_tripped();
+                if (rc < 0) printf("[ToF] send_alarm_tripped err=%d\n", rc);
 
-            if (p.ble_q && p.ble) {
-                p.ble_q->call(callback(p.ble, &BluetoothAlert::trigger_alert));
+                if (p.ble_q && p.ble) {
+                    p.ble_q->call(callback(p.ble, &BluetoothAlert::trigger_alert));
+                }
+                lastTrig = now;
+                triggered = true;
             }
-
-            triggered = true;
+            
         }
         else if (distance >= static_cast<int>(p.trigger_range_mm)) {
             triggered = false;
-        } else {
-            triggered = true;
+        } 
+        else{
+            triggered =false;
         }
-
         ThisThread::sleep_for(100ms);
     }
 }
