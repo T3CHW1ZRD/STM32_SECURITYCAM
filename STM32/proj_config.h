@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 /* ── Network ──────────────────────────────────────────────── */
-static const char* SERVER_IP   = "172.20.10.3";
+static const char* SERVER_IP   = "10.0.0.102";
 static int         SERVER_PORT = 5001;
 
 /* ── BLE ──────────────────────────────────────────────── */

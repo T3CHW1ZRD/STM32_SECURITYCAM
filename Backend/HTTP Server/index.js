@@ -68,7 +68,7 @@ app.post("/device/image", express.raw({ type: 'application/octet-stream', limit:
             fs.writeFileSync(filepath, image);
             const newImage = await prisma.image.create({
                 data:{
-                    timestamp: new Date(timestamp),
+                    timestamp: new Date(),
                     imageURL: `/uploads/${filename}`,
                     device: {connect:{id: deviceId}}
 
