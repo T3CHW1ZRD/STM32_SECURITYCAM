@@ -4,6 +4,11 @@ const fs = require('fs');
 const axios = require('axios');
 require('dotenv').config();
 
+
+//possible optimisations
+//Not accept and process image data if confimed that the device is not registered
+//remove file storage at the TCP level
+
 const keyHex = (process.env.KEY || '').trim();
 if (!/^[0-9a-fA-F]{48}$/.test(keyHex)) {
   throw new Error('KEY must be 48 hex chars (24 bytes for AES-192)');
@@ -63,13 +68,13 @@ async function deviceRegistration(clientIp){
 }
 
 async function forwardImage(imgBuffer, timestamp, clientIp) {
-  const filename = `img_${Date.now()}.jpg`;
-  try {
-    fs.writeFileSync(filename, imgBuffer);
-    console.log('Image saved:', filename);
-  } catch (err) {
-    console.error('Image saving failed', err);
-  }
+  // const filename = `img_${Date.now()}.jpg`;
+  // try {
+  //   fs.writeFileSync(filename, imgBuffer);
+  //   console.log('Image saved:', filename);
+  // } catch (err) {
+  //   console.error('Image saving failed', err);
+  // }
 
   try {
     await axios.post('http://localhost:3000/device/image', imgBuffer, {
