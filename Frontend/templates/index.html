@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Devices Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f4f4f4; }
+    .view-button {
+      padding: 6px 12px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+    .view-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Registered Devices</h1>
+  {% if devices %}
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>IP Address</th>
+      <th>Temperature</th>
+      <th>Humidity</th>
+      <th>Actions</th>
+    </tr>
+    {% for device in devices %}
+    <tr>
+      <td>{{ device.id }}</td>
+      <td>{{ device.ip }}</td>
+      <td>{{ device.temperature }}</td>
+      <td>{{ device.humidity }}</td>
+      <td>
+        <a class="view-button" href="/device/{{ device.id }}/images">View Images</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p>No devices found.</p>
+  {% endif %}
+</body>
+</html>
